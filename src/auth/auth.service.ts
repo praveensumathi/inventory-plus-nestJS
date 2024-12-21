@@ -27,14 +27,17 @@ export class AuthService {
     pass: string,
   ): Promise<CustomResponse<signInResponseDto>> {
     const user = await this.usersService.findOne(username);
+
+    //need to using crypto
     if (user?.password !== pass) {
       return ResponseFactory.error();
     }
+
     const payload = {
       sub: user.id,
       userName: user.userName,
-      roleId: '3001',
-      roleName: 'admin',
+      roleId: user.roleId,
+      roleName: user.role,
       iat: Math.floor(Date.now() / 1000),
     } as JWTPayloadType;
 
