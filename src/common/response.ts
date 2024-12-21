@@ -1,0 +1,27 @@
+export class CustomResponse<T> {
+  data: T | null;
+  success: boolean;
+  statusCode: number;
+  message: string;
+
+  constructor(data: T | null, success: boolean, code: number, message: string) {
+    this.data = data;
+    this.success = success;
+    this.statusCode = code;
+    this.message = message;
+  }
+}
+
+export class ResponseFactory {
+  static success<T>(data: T = null, code: number = 200, message: string = '') {
+    return new CustomResponse(data, true, code, message);
+  }
+
+  static error<T>(
+    data: T | null = null,
+    code: number = 300,
+    message: string = '',
+  ) {
+    return new CustomResponse(data, false, code, message);
+  }
+}
