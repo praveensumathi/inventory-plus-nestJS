@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import fs from 'fs';
-import { AppService } from 'src/app.service';
 import { signInResponseDto } from './dto/auth-response.dto';
 import { CustomResponse, ResponseFactory } from 'src/common/response';
 
@@ -19,7 +17,6 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private appService: AppService,
   ) {}
 
   async signIn(
@@ -38,14 +35,9 @@ export class AuthService {
       userName: user.userName,
       roleId: user.roleId,
       roleName: user.role,
-      iat: Math.floor(Date.now() / 1000),
     } as JWTPayloadType;
 
-    var privateKey = this.appService.getPrivateKey();
-
-    var token = await this.jwtService.signAsync(payload, {
-      privateKey: privateKey,
-    });
+    var token = this.jwtService.sign(payload);
 
     var data: signInResponseDto = {
       access_token: token,
