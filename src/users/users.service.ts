@@ -26,6 +26,8 @@ export class UsersService {
   ];
 
   async findOne(username: string): Promise<User | undefined> {
+    //TODO
+    //need to get the data from the db
     return this.users.find((user) => user.userName === username);
   }
 }

@@ -7,9 +7,15 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards';
 import { RolesGuard } from './guard/roles.guard';
+import { InspectionModule } from './inspection/inspection.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, ConfigModule.forRoot({ isGlobal: true })],
+  imports: [
+    AuthModule,
+    UsersModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    InspectionModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
