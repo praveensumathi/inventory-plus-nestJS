@@ -13,12 +13,11 @@ import {
   ApiBearerAuth,
   ApiExtraModels,
   ApiResponse,
-  ApiSecurity,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { signInResponseDto, UserDto } from './dto/auth-response.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Public, Roles } from 'src/decorator';
+import { LocalAuthGuard } from './guards';
 
 @ApiBearerAuth()
 @Controller('auth')
@@ -42,14 +41,27 @@ export class AuthController {
     },
   })
   @UseGuards(LocalAuthGuard)
+  @Public()
   async login(@Request() req, @Body() signInDto: signInDto) {
     var loggedInUser: UserDto = req.user;
     return this.authService.login(loggedInUser);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @Roles(['admin', 'manager'])
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Get('manager')
+  @Roles(['manager'])
+  getManagerRole() {
+    return 'manager role';
+  }
+
+  @Get('public-api')
+  @Public()
+  getPublicData() {
+    return 'public data no auth needed';
   }
 }

@@ -7,8 +7,7 @@ import { CustomResponse, ResponseFactory } from 'src/common/response';
 export type JWTPayloadType = {
   sub: number;
   userName: string;
-  roleId: string;
-  roleName: string;
+  roles: string[];
   iat: number;
 };
 
@@ -23,18 +22,16 @@ export class AuthService {
     const payload = {
       sub: user.id,
       userName: user.userName,
-      roleId: user.roleId,
-      roleName: user.role,
+      roles: user.roles,
     } as JWTPayloadType;
 
     var token = this.jwtService.sign(payload);
 
     var data: signInResponseDto = {
-      access_token: token,
-      user_data: {
+      accessToken: token,
+      userData: {
         id: user.id,
-        role: payload.roleName,
-        roleId: payload.roleId,
+        roles: payload.roles,
         userName: user.userName,
       },
     };

@@ -6,14 +6,12 @@ export class UserDto {
   @ApiProperty()
   userName: string;
   @ApiProperty()
-  role: string;
-  @ApiProperty()
-  roleId: string;
+  roles: string[];
 }
 
 export class signInResponseDto {
   @ApiProperty()
-  access_token: string;
+  accessToken: string;
   @ApiProperty()
-  user_data: UserDto;
+  userData: UserDto;
 }

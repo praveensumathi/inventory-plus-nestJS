@@ -5,8 +5,7 @@ export type User = {
   id: number;
   userName: string;
   password: string;
-  role: string;
-  roleId: string;
+  roles: string[];
 };
 
 @Injectable()
@@ -16,15 +15,13 @@ export class UsersService {
       id: 1,
       userName: 'praveen',
       password: '1234',
-      role: 'admin',
-      roleId: '1',
+      roles: ['admin', 'manager'],
     },
     {
       id: 2,
       userName: 'maria',
       password: '1234',
-      role: 'clerk',
-      roleId: '2',
+      roles: ['manager'],
     },
   ];
 
