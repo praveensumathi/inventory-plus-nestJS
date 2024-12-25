@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { signInResponseDto } from './dto/auth-response.dto';
+import { signInResponseDto, UserDto } from './dto/auth-response.dto';
 import { CustomResponse, ResponseFactory } from 'src/common/response';
 
 export type JWTPayloadType = {
@@ -19,17 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(
-    username: string,
-    pass: string,
-  ): Promise<CustomResponse<signInResponseDto>> {
-    const user = await this.usersService.findOne(username);
-
-    //need to using crypto
-    if (user?.password !== pass) {
-      return ResponseFactory.error();
-    }
-
+  async login(user: UserDto): Promise<CustomResponse<signInResponseDto>> {
     const payload = {
       sub: user.id,
       userName: user.userName,
@@ -50,5 +40,17 @@ export class AuthService {
     };
 
     return ResponseFactory.success(data);
+  }
+
+  async validateUser(username: string, pass: string): Promise<UserDto> {
+    const user = await this.usersService.findOne(username);
+
+    //TODO
+    //use bcrypt to check passwords
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result as UserDto;
+    }
+    return null;
   }
 }

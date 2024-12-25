@@ -1,10 +1,26 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Request,
+  Get,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { signInDto } from './dto/auth-request.dto';
 import { CustomResponse } from 'src/common/response';
-import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import { signInResponseDto } from './dto/auth-response.dto';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiResponse,
+  ApiSecurity,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import { signInResponseDto, UserDto } from './dto/auth-response.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+@ApiBearerAuth()
 @Controller('auth')
 @ApiExtraModels(CustomResponse, signInResponseDto)
 export class AuthController {
@@ -25,7 +41,15 @@ export class AuthController {
       ],
     },
   })
-  signIn(@Body() signInDto: signInDto) {
-    return this.authService.signIn(signInDto.userName, signInDto.password);
+  @UseGuards(LocalAuthGuard)
+  async login(@Request() req, @Body() signInDto: signInDto) {
+    var loggedInUser: UserDto = req.user;
+    return this.authService.login(loggedInUser);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
