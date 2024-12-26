@@ -6,6 +6,9 @@ import {
   CustomResponse,
   ResponseFactory,
 } from 'src/common/dto/common-response';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Test } from 'src/entities';
+import { Repository } from 'typeorm';
 
 export type JWTPayloadType = {
   sub: number;
@@ -19,6 +22,8 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    @InjectRepository(Test)
+    private readonly testRepo: Repository<Test>,
   ) {}
 
   async login(user: UserDto): Promise<CustomResponse<signInResponseDto>> {
@@ -52,5 +57,9 @@ export class AuthService {
       return result as UserDto;
     }
     return null;
+  }
+
+  async getTestData(): Promise<any> {
+    return this.testRepo.find();
   }
 }

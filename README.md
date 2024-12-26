@@ -35,3 +35,8 @@ To create new resource without spec file
 
   Would you like to generate CRUD entry points? (Y/n)  -> choose 'n'
 ```
+
+Generate entities from DB
+```bash
+  npx typeorm-model-generator -h localhost -d postgres -u postgres -x root -e postgres -o ./src/migration --noConfig true
+```
