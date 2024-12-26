@@ -37,6 +37,7 @@ To create new resource without spec file
 ```
 
 Generate entities from DB
+
 ```bash
-  npx typeorm-model-generator -h localhost -d postgres -u postgres -x root -e postgres -o ./src/migration --noConfig true
+  npx typeorm-model-generator -h localhost -d postgres -u postgres -x admin -e postgres -o ./src/migration --noConfig true
 ```

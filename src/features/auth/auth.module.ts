@@ -7,7 +7,7 @@ import { AppService } from 'src/app.service';
 import { JwtStrategy, LocalStrategy } from './strategy';
 import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Test } from 'src/entities';
+import { Properties } from 'src/entities';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { Test } from 'src/entities';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Test]),
+    TypeOrmModule.forFeature([Properties]),
   ],
   controllers: [AuthController],
   providers: [AuthService, AppService, LocalStrategy, JwtStrategy],

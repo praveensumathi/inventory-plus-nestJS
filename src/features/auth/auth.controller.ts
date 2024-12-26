@@ -64,10 +64,4 @@ export class AuthController {
   getPublicData() {
     return 'public data no auth needed';
   }
-
-  @Get('test-api')
-  @Public()
-  getTestData() {
-    return this.authService.getTestData();
-  }
 }
