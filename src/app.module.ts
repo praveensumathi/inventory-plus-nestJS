@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/guards';
 import { RolesGuard } from './guard/roles.guard';
-import { InspectionModule } from './inspection/inspection.module';
+import { AuthModule, InspectionModule, UsersModule } from './features';
+import { JwtAuthGuard } from './features/auth/guards';
+import { PropertyModule } from './features/property/property.module';
 
 @Module({
   imports: [
@@ -15,6 +14,7 @@ import { InspectionModule } from './inspection/inspection.module';
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
     InspectionModule,
+    PropertyModule,
   ],
   controllers: [AppController],
   providers: [

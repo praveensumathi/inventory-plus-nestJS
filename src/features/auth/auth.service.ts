@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { signInResponseDto, UserDto } from './dto/auth-response.dto';
-import { CustomResponse, ResponseFactory } from 'src/common/response';
+import {
+  CustomResponse,
+  ResponseFactory,
+} from 'src/common/dto/common-response';
 
 export type JWTPayloadType = {
   sub: number;
