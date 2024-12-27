@@ -1,4 +1,11 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Contacts } from "./Contacts";
 
 @Index("properties_pkey", ["id"], { unique: true })
 @Entity("properties", { schema: "public" })
@@ -47,9 +54,6 @@ export class Properties {
   @Column("bigint", { name: "client_id", nullable: true })
   clientId: string | null;
 
-  @Column("varchar", { name: "tags", nullable: true, array: true })
-  tags: string[] | null;
-
   @Column("character varying", { name: "uprn", nullable: true })
   uprn: string | null;
 
@@ -64,4 +68,13 @@ export class Properties {
 
   @Column("character varying", { name: "notes", nullable: true })
   notes: string | null;
+
+  @Column("varchar", { name: "tags", nullable: true, array: true })
+  tags: string[] | null;
+
+  @Column("smallint", { name: "status", nullable: true, default: () => "1" })
+  status: number | null;
+
+  @OneToMany(() => Contacts, (contacts) => contacts.property)
+  contacts: Contacts[];
 }

@@ -20,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       port: parseInt(process.env.POSTGRES_PORT),
       logging: process.env.MODE == 'DEV',
       entities: ['dist/entities/*.js'],
+      //synchronize: true,
     }),
     AuthModule,
     UsersModule,
