@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Contacts } from "./Contacts";
+import { Meters } from "./Meters";
 
 @Index("properties_pkey", ["id"], { unique: true })
 @Entity("properties", { schema: "public" })
@@ -77,4 +78,7 @@ export class Properties {
 
   @OneToMany(() => Contacts, (contacts) => contacts.property)
   contacts: Contacts[];
+
+  @OneToMany(() => Meters, (meters) => meters.property)
+  meters: Meters[];
 }
