@@ -35,6 +35,12 @@ export class Contacts {
   @Column("boolean", { name: "deliver", default: () => "false" })
   deliver: boolean;
 
+  @Column("bigint", { name: "created_by", nullable: true })
+  createdBy: string | null;
+
+  @Column("timestamp without time zone", { name: "created_at", nullable: true })
+  createdAt: Date | null;
+
   @ManyToOne(() => Properties, (properties) => properties.contacts, {
     onDelete: "CASCADE",
   })

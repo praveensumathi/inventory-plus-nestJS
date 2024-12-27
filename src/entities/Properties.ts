@@ -76,6 +76,12 @@ export class Properties {
   @Column("smallint", { name: "status", nullable: true, default: () => "1" })
   status: number | null;
 
+  @Column("bigint", { name: "created_by", nullable: true })
+  createdBy: string | null;
+
+  @Column("timestamp without time zone", { name: "created_at", nullable: true })
+  createdAt: Date | null;
+
   @OneToMany(() => Contacts, (contacts) => contacts.property)
   contacts: Contacts[];
 

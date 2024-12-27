@@ -41,6 +41,12 @@ export class Meters {
   @Column("bigint", { name: "parent_id", nullable: true })
   parentId: string | null;
 
+  @Column("bigint", { name: "created_by", nullable: true })
+  createdBy: string | null;
+
+  @Column("timestamp without time zone", { name: "created_at", nullable: true })
+  createdAt: Date | null;
+
   @ManyToOne(() => Properties, (properties) => properties.meters, {
     onDelete: "CASCADE",
   })
