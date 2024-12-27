@@ -2,11 +2,14 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Contacts } from "./Contacts";
 import { Meters } from "./Meters";
+import { Clients } from "./Clients";
 
 @Index("properties_pkey", ["id"], { unique: true })
 @Entity("properties", { schema: "public" })
@@ -52,9 +55,6 @@ export class Properties {
   @Column("boolean", { name: "garden", default: () => "false" })
   garden: boolean;
 
-  @Column("bigint", { name: "client_id", nullable: true })
-  clientId: string | null;
-
   @Column("character varying", { name: "uprn", nullable: true })
   uprn: string | null;
 
@@ -81,4 +81,8 @@ export class Properties {
 
   @OneToMany(() => Meters, (meters) => meters.property)
   meters: Meters[];
+
+  @ManyToOne(() => Clients, (clients) => clients.properties)
+  @JoinColumn([{ name: "client_id", referencedColumnName: "id" }])
+  client: Clients;
 }
