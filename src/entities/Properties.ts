@@ -11,76 +11,68 @@ import { Contacts } from "./Contacts";
 import { Meters } from "./Meters";
 import { Clients } from "./Clients";
 
-@Index("properties_pkey", ["id"], { unique: true })
-@Entity("properties", { schema: "public" })
+@Index("PK_property", ["id"], { unique: true })
+@Entity("properties", { schema: "dbo" })
 export class Properties {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;
 
-  @Column("jsonb", { name: "address" })
-  address: object;
+  @Column("nvarchar", { name: "address" })
+  address: string;
 
-  @Column("jsonb", { name: "geocoords", nullable: true })
-  geocoords: object | null;
+  @Column("nvarchar", { name: "geocoords", nullable: true })
+  geocoords: string | null;
 
-  @Column("character varying", {
-    name: "furnished",
-    nullable: true,
-    length: 30,
-  })
+  @Column("nvarchar", { name: "furnished", nullable: true, length: 30 })
   furnished: string | null;
 
-  @Column("character varying", { name: "type", nullable: true, length: 100 })
+  @Column("nvarchar", { name: "type", nullable: true, length: 100 })
   type: string | null;
 
-  @Column("character varying", {
-    name: "detachment",
-    nullable: true,
-    length: 50,
-  })
+  @Column("nvarchar", { name: "detachment", nullable: true, length: 50 })
   detachment: string | null;
 
-  @Column("integer", { name: "no_of_beds", default: () => "0" })
+  @Column("int", { name: "no_of_beds", default: () => "(0)" })
   noOfBeds: number;
 
-  @Column("integer", { name: "no_of_baths", default: () => "0" })
+  @Column("int", { name: "no_of_baths", default: () => "(0)" })
   noOfBaths: number;
 
-  @Column("integer", { name: "no_of_garages", default: () => "0" })
+  @Column("int", { name: "no_of_garages", default: () => "(0)" })
   noOfGarages: number;
 
-  @Column("boolean", { name: "parking", default: () => "false" })
+  @Column("bit", { name: "parking", default: () => "(0)" })
   parking: boolean;
 
-  @Column("boolean", { name: "garden", default: () => "false" })
+  @Column("bit", { name: "garden", default: () => "(0)" })
   garden: boolean;
 
-  @Column("character varying", { name: "uprn", nullable: true })
+  @Column("nvarchar", { name: "uprn", nullable: true })
   uprn: string | null;
 
-  @Column("jsonb", { name: "custom_fields", nullable: true })
-  customFields: object | null;
+  @Column("nvarchar", { name: "custom_fields", nullable: true })
+  customFields: string | null;
 
-  @Column("character varying", { name: "ref", nullable: true })
+  @Column("nvarchar", { name: "ref", nullable: true })
   ref: string | null;
 
   @Column("bigint", { name: "parent_id", nullable: true })
   parentId: string | null;
 
-  @Column("character varying", { name: "notes", nullable: true })
+  @Column("nvarchar", { name: "notes", nullable: true })
   notes: string | null;
 
-  @Column("varchar", { name: "tags", nullable: true, array: true })
-  tags: string[] | null;
+  @Column("nvarchar", { name: "tags", nullable: true })
+  tags: string | null;
 
-  @Column("smallint", { name: "status", nullable: true, default: () => "1" })
+  @Column("smallint", { name: "status", nullable: true, default: () => "(1)" })
   status: number | null;
 
   @Column("bigint", { name: "created_by", nullable: true })
   createdBy: string | null;
 
-  @Column("timestamp without time zone", { name: "created_at", nullable: true })
-  createdAt: Date | null;
+  @Column("datetime", { name: "created_at", default: () => "getdate()" })
+  createdAt: Date;
 
   @OneToMany(() => Contacts, (contacts) => contacts.property)
   contacts: Contacts[];

@@ -8,35 +8,35 @@ import {
 } from "typeorm";
 import { Properties } from "./Properties";
 
-@Index("meters_pkey", ["id"], { unique: true })
-@Entity("meters", { schema: "public" })
+@Index("PK_meter", ["id"], { unique: true })
+@Entity("meters", { schema: "dbo" })
 export class Meters {
   @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
   id: string;
 
-  @Column("character varying", { name: "type" })
+  @Column("nvarchar", { name: "type" })
   type: string;
 
-  @Column("character varying", { name: "location" })
+  @Column("nvarchar", { name: "location" })
   location: string;
 
-  @Column("character varying", { name: "reading" })
+  @Column("nvarchar", { name: "reading" })
   reading: string;
 
-  @Column("character varying", { name: "supplier", nullable: true })
+  @Column("nvarchar", { name: "supplier", nullable: true })
   supplier: string | null;
 
   @Column("date", { name: "date" })
-  date: string;
+  date: Date;
 
-  @Column("character varying", { name: "time" })
+  @Column("nvarchar", { name: "time" })
   time: string;
 
-  @Column("character varying", { name: "serial_no", nullable: true })
+  @Column("nvarchar", { name: "serial_no", nullable: true })
   serialNo: string | null;
 
-  @Column("varchar", { name: "attachments", nullable: true, array: true })
-  attachments: string[] | null;
+  @Column("nvarchar", { name: "attachments", nullable: true })
+  attachments: string | null;
 
   @Column("bigint", { name: "parent_id", nullable: true })
   parentId: string | null;
@@ -44,8 +44,8 @@ export class Meters {
   @Column("bigint", { name: "created_by", nullable: true })
   createdBy: string | null;
 
-  @Column("timestamp without time zone", { name: "created_at", nullable: true })
-  createdAt: Date | null;
+  @Column("datetime", { name: "created_at", default: () => "getdate()" })
+  createdAt: Date;
 
   @ManyToOne(() => Properties, (properties) => properties.meters, {
     onDelete: "CASCADE",
