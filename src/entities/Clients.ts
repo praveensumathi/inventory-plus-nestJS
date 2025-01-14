@@ -2,85 +2,106 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Customers } from "./Customers";
 import { Properties } from "./Properties";
 
-@Index("PK_clients", ["id"], { unique: true })
-@Entity("clients", { schema: "dbo" })
+@Index("PK_Client_1", ["id"], { unique: true })
+@Entity("Clients", { schema: "dbo" })
 export class Clients {
-  @PrimaryGeneratedColumn({ type: "bigint", name: "id" })
+  @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
-  @Column("char", { name: "title", nullable: true, length: 10 })
+  @Column("varchar", { name: "Title", nullable: true, length: 20 })
   title: string | null;
 
-  @Column("nvarchar", { name: "name" })
-  name: string;
+  @Column("varchar", { name: "Name", nullable: true, length: 150 })
+  name: string | null;
 
-  @Column("nvarchar", { name: "email" })
-  email: string;
+  @Column("varchar", { name: "Email", nullable: true, length: 100 })
+  email: string | null;
 
-  @Column("nvarchar", { name: "company", nullable: true })
+  @Column("varchar", { name: "Company", nullable: true, length: 100 })
   company: string | null;
 
-  @Column("nvarchar", { name: "telephone", nullable: true })
+  @Column("varchar", { name: "Telephone", nullable: true, length: 20 })
   telephone: string | null;
 
-  @Column("nvarchar", { name: "mobile", nullable: true })
+  @Column("varchar", { name: "Mobile", nullable: true, length: 20 })
   mobile: string | null;
 
-  @Column("nvarchar", { name: "address", nullable: true })
+  @Column("varchar", { name: "Address", nullable: true, length: 3500 })
   address: string | null;
 
-  @Column("nvarchar", { name: "website", nullable: true })
+  @Column("varchar", { name: "Website", nullable: true, length: 250 })
   website: string | null;
 
-  @Column("bit", { name: "email_notification", default: () => "(1)" })
-  emailNotification: boolean;
+  @Column("bit", { name: "EmailNotification", nullable: true })
+  emailNotification: boolean | null;
 
-  @Column("char", { name: "company_no", nullable: true, length: 40 })
+  @Column("varchar", { name: "CompanyNo", nullable: true, length: 40 })
   companyNo: string | null;
 
-  @Column("char", { name: "vat", nullable: true, length: 50 })
+  @Column("varchar", { name: "Vat", nullable: true, length: 50 })
   vat: string | null;
 
-  @Column("char", { name: "billing_email", nullable: true, length: 50 })
+  @Column("varchar", { name: "BillingEmail", nullable: true, length: 100 })
   billingEmail: string | null;
 
-  @Column("nvarchar", { name: "logo_url", nullable: true })
+  @Column("varchar", { name: "LogoUrl", nullable: true, length: 500 })
   logoUrl: string | null;
 
-  @Column("nvarchar", { name: "additional_emails", nullable: true })
+  @Column("varchar", { name: "AdditionalEmails", nullable: true, length: 2000 })
   additionalEmails: string | null;
 
-  @Column("bit", { name: "show_invoice_inmenu", default: () => "(0)" })
-  showInvoiceInmenu: boolean;
+  @Column("bit", { name: "ShowInvoice", nullable: true })
+  showInvoice: boolean | null;
 
-  @Column("smallint", { name: "default_invoice_payee", nullable: true })
+  @Column("smallint", { name: "DefaultInvoicePayee", nullable: true })
   defaultInvoicePayee: number | null;
 
-  @Column("bit", { name: "show_integrations", default: () => "(1)" })
-  showIntegrations: boolean;
+  @Column("bit", { name: "ShowIntegrations", nullable: true })
+  showIntegrations: boolean | null;
 
-  @Column("bit", { name: "allow_create_inspection", default: () => "(1)" })
-  allowCreateInspection: boolean;
+  @Column("bit", { name: "AllowCreateInspection", nullable: true })
+  allowCreateInspection: boolean | null;
 
-  @Column("bit", { name: "allow_edit_appoinments", default: () => "(1)" })
-  allowEditAppoinments: boolean;
+  @Column("bit", { name: "AllowEditAppointments", nullable: true })
+  allowEditAppointments: boolean | null;
 
-  @Column("bit", { name: "show_clerk_info", default: () => "(0)" })
-  showClerkInfo: boolean;
+  @Column("bit", { name: "ShowClerkInfo", nullable: true })
+  showClerkInfo: boolean | null;
 
-  @Column("nvarchar", { name: "notes", nullable: true })
+  @Column("varchar", { name: "Notes", nullable: true, length: 5000 })
   notes: string | null;
 
-  @Column("bigint", { name: "created_by", nullable: true })
+  @Column("bigint", { name: "CreatedBy", nullable: true })
   createdBy: string | null;
 
-  @Column("datetime", { name: "created_at", default: () => "getdate()" })
-  createdAt: Date;
+  @Column("datetime", {
+    name: "CreatedDate",
+    nullable: true,
+    default: () => "getdate()",
+  })
+  createdDate: Date | null;
+
+  @Column("bigint", { name: "ModifiedBy", nullable: true })
+  modifiedBy: string | null;
+
+  @Column("datetime", {
+    name: "ModifiedDate",
+    nullable: true,
+    default: () => "getdate()",
+  })
+  modifiedDate: Date | null;
+
+  @ManyToOne(() => Customers, (customers) => customers.clients)
+  @JoinColumn([{ name: "CustomerId", referencedColumnName: "id" }])
+  customer: Customers;
 
   @OneToMany(() => Properties, (properties) => properties.client)
   properties: Properties[];
