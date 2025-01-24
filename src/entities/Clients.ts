@@ -1,80 +1,107 @@
-import { Column, Entity, Index, OneToMany } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Customers } from "./Customers";
 import { Properties } from "./Properties";
 
-@Index("clients_pkey", ["id"], { unique: true })
-@Entity("clients", { schema: "public" })
+@Index("PK_Client_1", ["id"], { unique: true })
+@Entity("Clients", { schema: "dbo" })
 export class Clients {
-  @Column("bigint", { primary: true, name: "id" })
+  @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
-  @Column("character", { name: "title", nullable: true, length: 10 })
+  @Column("varchar", { name: "Title", nullable: true, length: 20 })
   title: string | null;
 
-  @Column("character varying", { name: "name" })
-  name: string;
+  @Column("varchar", { name: "Name", nullable: true, length: 150 })
+  name: string | null;
 
-  @Column("character varying", { name: "email" })
-  email: string;
+  @Column("varchar", { name: "Email", nullable: true, length: 100 })
+  email: string | null;
 
-  @Column("character varying", { name: "company", nullable: true })
+  @Column("varchar", { name: "Company", nullable: true, length: 100 })
   company: string | null;
 
-  @Column("character varying", { name: "telephone", nullable: true })
+  @Column("varchar", { name: "Telephone", nullable: true, length: 20 })
   telephone: string | null;
 
-  @Column("character varying", { name: "mobile", nullable: true })
+  @Column("varchar", { name: "Mobile", nullable: true, length: 20 })
   mobile: string | null;
 
-  @Column("jsonb", { name: "address", nullable: true })
-  address: object | null;
+  @Column("varchar", { name: "Address", nullable: true, length: 3500 })
+  address: string | null;
 
-  @Column("character varying", { name: "website", nullable: true })
+  @Column("varchar", { name: "Website", nullable: true, length: 250 })
   website: string | null;
 
-  @Column("boolean", { name: "email_notification", default: () => "true" })
-  emailNotification: boolean;
+  @Column("bit", { name: "EmailNotification", nullable: true })
+  emailNotification: boolean | null;
 
-  @Column("character", { name: "company_no", nullable: true, length: 40 })
+  @Column("varchar", { name: "CompanyNo", nullable: true, length: 40 })
   companyNo: string | null;
 
-  @Column("character", { name: "vat", nullable: true, length: 50 })
+  @Column("varchar", { name: "Vat", nullable: true, length: 50 })
   vat: string | null;
 
-  @Column("character", { name: "billing_email", nullable: true, length: 50 })
+  @Column("varchar", { name: "BillingEmail", nullable: true, length: 100 })
   billingEmail: string | null;
 
-  @Column("character varying", { name: "logo_url", nullable: true })
+  @Column("varchar", { name: "LogoUrl", nullable: true, length: 500 })
   logoUrl: string | null;
 
-  @Column("varchar", { name: "additional_emails", nullable: true, array: true })
-  additionalEmails: string[] | null;
+  @Column("varchar", { name: "AdditionalEmails", nullable: true, length: 2000 })
+  additionalEmails: string | null;
 
-  @Column("boolean", { name: "show_invoice_inmenu", default: () => "false" })
-  showInvoiceInmenu: boolean;
+  @Column("bit", { name: "ShowInvoice", nullable: true })
+  showInvoice: boolean | null;
 
-  @Column("smallint", { name: "default_invoice_payee", nullable: true })
+  @Column("smallint", { name: "DefaultInvoicePayee", nullable: true })
   defaultInvoicePayee: number | null;
 
-  @Column("boolean", { name: "show_integrations", default: () => "true" })
-  showIntegrations: boolean;
+  @Column("bit", { name: "ShowIntegrations", nullable: true })
+  showIntegrations: boolean | null;
 
-  @Column("boolean", { name: "allow_create_inspection", default: () => "true" })
-  allowCreateInspection: boolean;
+  @Column("bit", { name: "AllowCreateInspection", nullable: true })
+  allowCreateInspection: boolean | null;
 
-  @Column("boolean", { name: "allow_edit_appoinments", default: () => "true" })
-  allowEditAppoinments: boolean;
+  @Column("bit", { name: "AllowEditAppointments", nullable: true })
+  allowEditAppointments: boolean | null;
 
-  @Column("boolean", { name: "show_clerk_info", default: () => "false" })
-  showClerkInfo: boolean;
+  @Column("bit", { name: "ShowClerkInfo", nullable: true })
+  showClerkInfo: boolean | null;
 
-  @Column("character varying", { name: "notes", nullable: true })
+  @Column("varchar", { name: "Notes", nullable: true, length: 5000 })
   notes: string | null;
 
-  @Column("bigint", { name: "created_by", nullable: true })
+  @Column("bigint", { name: "CreatedBy", nullable: true })
   createdBy: string | null;
 
-  @Column("timestamp without time zone", { name: "created_at", nullable: true })
-  createdAt: Date | null;
+  @Column("datetime", {
+    name: "CreatedDate",
+    nullable: true,
+    default: () => "getdate()",
+  })
+  createdDate: Date | null;
+
+  @Column("bigint", { name: "ModifiedBy", nullable: true })
+  modifiedBy: string | null;
+
+  @Column("datetime", {
+    name: "ModifiedDate",
+    nullable: true,
+    default: () => "getdate()",
+  })
+  modifiedDate: Date | null;
+
+  @ManyToOne(() => Customers, (customers) => customers.clients)
+  @JoinColumn([{ name: "CustomerId", referencedColumnName: "id" }])
+  customer: Customers;
 
   @OneToMany(() => Properties, (properties) => properties.client)
   properties: Properties[];
