@@ -1,6 +1,19 @@
 import { Properties } from "./Properties";
-import { Meters } from "./Meters";
 import { Contacts } from "./Contacts";
+import { Customers } from "./Customers";
 import { Clients } from "./Clients";
+import { Inspections } from "./Inspections";
+import { SectionHeaders } from "./SectionHeaders";
+import { Sections } from "./Sections";
+import { Users } from "./Users";
 
-export { Properties, Meters, Contacts, Clients };
+export {
+  Properties,
+  Contacts,
+  Customers,
+  Clients,
+  Inspections,
+  SectionHeaders,
+  Sections,
+  Users,
+};
