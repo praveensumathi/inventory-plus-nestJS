@@ -36,8 +36,14 @@ To create new resource without spec file
   Would you like to generate CRUD entry points? (Y/n)  -> choose 'n'
 ```
 
-Generate entities from DB
+Generate entities from DB for dev
 
 ```bash
-  npx typeorm-model-generator -h localhost -u sa -x root -p 1433 -d ProPlus -e mssql -o ./src/migration --noConfig true
+  npm run scaffoldingdb:dev-db
+```
+
+Start app using dev DB
+
+```bash
+  npm run start:dev
 ```
