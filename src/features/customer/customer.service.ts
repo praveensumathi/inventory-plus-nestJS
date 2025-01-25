@@ -5,8 +5,11 @@ import { Repository } from "typeorm";
 import { CreateCustomerDto } from "./dto/customer-request";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
-import { CustomerMapperProfile } from "src/mapperProfile";
 import { CustomerInfoDto } from "./dto/customer-response";
+import {
+  CustomResponse,
+  ResponseFactory,
+} from "src/common/dto/common-response";
 
 @Injectable()
 export class CustomerService {
@@ -17,23 +20,39 @@ export class CustomerService {
     private readonly mapper: Mapper,
   ) {}
 
-  async addCustomer(customerDto: CreateCustomerDto): Promise<Customers> {
+  async addCustomer(
+    customerDto: CreateCustomerDto,
+  ): Promise<CustomResponse<Customers>> {
     var customerEntity = this.mapper.map(
       customerDto,
       CreateCustomerDto,
       Customers,
     );
 
-    return await this.customerRepository.save(customerEntity);
+    customerEntity = this.customerRepository.create(customerEntity);
+
+    if (customerEntity.id == "0") {
+      return ResponseFactory.error("Error While Save Customer", 5001);
+    }
+
+    return ResponseFactory.success(customerEntity);
   }
 
-  async getCustomerById(customerId: number): Promise<CustomerInfoDto> {
+  async getCustomerById(
+    customerId: number,
+  ): Promise<CustomResponse<CustomerInfoDto>> {
     var customerEntity = await this.customerRepository.findOne({
       where: {
         id: customerId.toString(),
       },
     });
 
-    return this.mapper.map(customerEntity, Customers, CustomerInfoDto);
+    var customerInfo = this.mapper.map(
+      customerEntity,
+      Customers,
+      CustomerInfoDto,
+    );
+
+    return ResponseFactory.success(customerInfo);
   }
 }

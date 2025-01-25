@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CustomResponse<T> {
   @ApiProperty()
@@ -19,15 +19,11 @@ export class CustomResponse<T> {
 }
 
 export class ResponseFactory {
-  static success<T>(data: T = null, code: number = 200, message: string = '') {
+  static success<T>(data: T = null, code: number = 200, message: string = "") {
     return new CustomResponse(data, true, code, message);
   }
 
-  static error<T>(
-    data: T | null = null,
-    code: number = 300,
-    message: string = '',
-  ) {
+  static error(message: string, code: number, data: null = null) {
     return new CustomResponse(data, false, code, message);
   }
 }

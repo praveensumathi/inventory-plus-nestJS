@@ -1,13 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { JwtService } from '@nestjs/jwt';
-import { signInResponseDto, UserDto } from './dto/auth-response.dto';
+import { Injectable } from "@nestjs/common";
+import { UsersService } from "../users/users.service";
+import { JwtService } from "@nestjs/jwt";
+import { signInResponseDto, UserDto } from "./dto/auth-response.dto";
 import {
   CustomResponse,
   ResponseFactory,
-} from 'src/common/dto/common-response';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+} from "src/common/dto/common-response";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 export type JWTPayloadType = {
   sub: number;
@@ -45,14 +45,14 @@ export class AuthService {
   }
 
   async validateUser(username: string, pass: string): Promise<UserDto> {
-    const user = await this.usersService.findOne(username);
+    // const user = await this.usersService.findOne(username);
 
-    //TODO
-    //use bcrypt to check passwords
-    if (user && user.password === pass) {
-      const { password, ...result } = user;
-      return result as UserDto;
-    }
+    // //TODO
+    // //use bcrypt to check passwords
+    // if (user && user.password === pass) {
+    //   const { password, ...result } = user;
+    //   return result as UserDto;
+    // }
     return null;
   }
 }

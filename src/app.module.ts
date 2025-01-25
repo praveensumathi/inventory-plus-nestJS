@@ -4,11 +4,15 @@ import { AppService } from "./app.service";
 import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { RolesGuard } from "./guard/roles.guard";
-import { AuthModule, InspectionModule, UsersModule } from "./features";
+import {
+  AuthModule,
+  CustomerModule,
+  InspectionModule,
+  PropertyModule,
+  UsersModule,
+} from "./features";
 import { JwtAuthGuard } from "./features/auth/guards";
-import { PropertyModule } from "./features/property/property.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CustomerModule } from "./features/customer/customer.module";
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
 
@@ -32,11 +36,11 @@ import { classes } from "@automapper/classes";
       strategyInitializer: classes(),
     }),
     AuthModule,
-    UsersModule,
     ConfigModule.forRoot({ isGlobal: true }),
     InspectionModule,
     PropertyModule,
     CustomerModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
