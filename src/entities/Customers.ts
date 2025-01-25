@@ -29,7 +29,7 @@ export class Customers {
   phone: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "Active", nullable: true })
+  @Column("bit", { name: "Active", nullable: true, default: () => "(1)" })
   active: boolean | null;
 
   @AutoMap()

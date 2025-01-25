@@ -1,12 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-class BaseCustomerDto {
-  @ApiPropertyOptional()
-  @ApiProperty({ description: "The unique identifier of the customer" })
-  @AutoMap()
-  id: number;
-
+export class BaseCustomerDto {
   @ApiProperty({ description: "The name of the customer" })
   @AutoMap()
   name: string;
@@ -22,4 +17,9 @@ class BaseCustomerDto {
 
 export class CreateCustomerDto extends BaseCustomerDto {}
 
-export class UpdateCustomerDto extends BaseCustomerDto {}
+export class UpdateCustomerDto extends BaseCustomerDto {
+  @ApiPropertyOptional()
+  @ApiProperty({ description: "The unique identifier of the customer" })
+  @AutoMap()
+  id: number;
+}

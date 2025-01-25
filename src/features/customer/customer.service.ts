@@ -6,6 +6,7 @@ import { CreateCustomerDto } from "./dto/customer-request";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
 import { CustomerMapperProfile } from "src/mapperProfile";
+import { CustomerInfoDto } from "./dto/customer-response";
 
 @Injectable()
 export class CustomerService {
@@ -16,13 +17,23 @@ export class CustomerService {
     private readonly mapper: Mapper,
   ) {}
 
-  async addCustomer(request : Request,customerDto: CreateCustomerDto): Promise<Customers> {
+  async addCustomer(customerDto: CreateCustomerDto): Promise<Customers> {
     var customerEntity = this.mapper.map(
       customerDto,
       CreateCustomerDto,
       Customers,
     );
-    return customerEntity;
-    //return await this.customerRepository.save(customerEntity);
+
+    return await this.customerRepository.save(customerEntity);
+  }
+
+  async getCustomerById(customerId: number): Promise<CustomerInfoDto> {
+    var customerEntity = await this.customerRepository.findOne({
+      where: {
+        id: customerId.toString(),
+      },
+    });
+
+    return this.mapper.map(customerEntity, Customers, CustomerInfoDto);
   }
 }

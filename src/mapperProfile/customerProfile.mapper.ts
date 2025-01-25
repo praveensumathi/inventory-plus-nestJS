@@ -10,6 +10,7 @@ import {
 } from "@automapper/core";
 import { Customers } from "src/entities";
 import { CreateCustomerDto } from "src/features/customer/dto/customer-request";
+import { CustomerInfoDto } from "src/features/customer/dto/customer-response";
 
 @Injectable()
 export class CustomerMapperProfile extends AutomapperProfile {
@@ -32,6 +33,8 @@ export class CustomerMapperProfile extends AutomapperProfile {
         CreateCustomerDto,
         //forMember((des) => des.id, ignore()),
       );
+
+      createMap(mapper, Customers, CustomerInfoDto);
     };
   }
 }
