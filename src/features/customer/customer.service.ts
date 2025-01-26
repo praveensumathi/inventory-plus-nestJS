@@ -39,20 +39,24 @@ export class CustomerService {
   }
 
   async getCustomerById(
-    customerId: number,
+    customerId: string,
   ): Promise<CustomResponse<CustomerInfoDto>> {
-    var customerEntity = await this.customerRepository.findOne({
-      where: {
-        id: customerId.toString(),
-      },
-    });
+    try {
+      var customerEntity = await this.customerRepository.findOne({
+        where: {
+          id: customerId,
+        },
+      });
 
-    var customerInfo = this.mapper.map(
-      customerEntity,
-      Customers,
-      CustomerInfoDto,
-    );
+      var customerInfo = this.mapper.map(
+        customerEntity,
+        Customers,
+        CustomerInfoDto,
+      );
 
-    return ResponseFactory.success(customerInfo);
+      return ResponseFactory.success(customerInfo);
+    } catch (error) {
+      return ResponseFactory.error("Error While Create Customer");
+    }
   }
 }

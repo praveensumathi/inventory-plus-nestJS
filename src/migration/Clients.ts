@@ -11,7 +11,7 @@ import { AutoMap } from "@automapper/classes";
 import { Customers } from "./Customers";
 import { Properties } from "./Properties";
 
-@Index("PK_Client_1", ["id"], { unique: true })
+@Index("PK_Client", ["id"], { unique: true })
 @Entity("Clients", { schema: "dbo" })
 export class Clients {
   @AutoMap()

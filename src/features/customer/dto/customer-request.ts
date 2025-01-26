@@ -21,5 +21,5 @@ export class UpdateCustomerDto extends BaseCustomerDto {
   @ApiPropertyOptional()
   @ApiProperty({ description: "The unique identifier of the customer" })
   @AutoMap()
-  id: number;
+  id: string;
 }

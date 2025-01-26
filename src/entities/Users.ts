@@ -9,7 +9,7 @@ import {
 import { AutoMap } from "@automapper/classes";
 import { Customers } from "./Customers";
 
-@Index("PK_Client", ["id"], { unique: true })
+@Index("PK_Users", ["id"], { unique: true })
 @Entity("Users", { schema: "dbo" })
 export class Users {
   @AutoMap()
@@ -49,8 +49,8 @@ export class Users {
   address: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "Status", nullable: true })
-  status: boolean | null;
+  @Column("bit", { name: "Status", default: () => "(0)" })
+  status: boolean;
 
   @AutoMap()
   @Column("bit", { name: "EmailNotification", nullable: true })

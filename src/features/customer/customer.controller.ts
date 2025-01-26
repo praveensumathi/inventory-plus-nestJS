@@ -17,7 +17,7 @@ export class CustomerController {
 
   @Get("getCustomerById/:id")
   @Public()
-  async getCustomerByIs(@Param("id") id: number) {
+  async getCustomerByIs(@Param("id") id: string) {
     return await this.customerService.getCustomerById(id);
   }
 }
