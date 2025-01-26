@@ -54,10 +54,10 @@ export class UsersService {
           return ResponseFactory.error();
         }
 
-        return ResponseFactory.success(userEntity);
+        return ResponseFactory.success();
       }
 
-      return ResponseFactory.error();
+      return ResponseFactory.error("Error While Create User");
     } catch (error) {
       return ResponseFactory.error("Error While Create User");
     }

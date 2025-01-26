@@ -33,6 +33,10 @@ export class Users {
   email: string | null;
 
   @AutoMap()
+  @Column("varchar", { name: "ProfileUrl", nullable: true, length: 800 })
+  profileUrl: string | null;
+
+  @AutoMap()
   @Column("varchar", { name: "Telephone", nullable: true, length: 50 })
   telephone: string | null;
 
