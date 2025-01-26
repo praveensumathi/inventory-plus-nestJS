@@ -2,50 +2,54 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { AutoMap } from "@automapper/classes";
 import { Sections } from "./Sections";
 
-@Index("PK_SectionHeaders", ["id"], { unique: true })
-@Entity("SectionHeaders", { schema: "dbo" })
+@Index("SectionHeaders_pkey", ["id"], { unique: true })
+@Entity("SectionHeaders", { schema: "public" })
 export class SectionHeaders {
   @AutoMap()
   @Column("bigint", { primary: true, name: "Id" })
   id: string;
 
   @AutoMap()
-  @Column("varchar", { name: "UUID", nullable: true, length: 100 })
+  @Column("character varying", { name: "UUID", nullable: true, length: 100 })
   uuid: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Name", nullable: true, length: 100 })
+  @Column("character varying", { name: "Name", nullable: true, length: 100 })
   name: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Label", nullable: true, length: 100 })
+  @Column("character varying", { name: "Label", nullable: true, length: 100 })
   label: string | null;
 
   @AutoMap()
-  @Column("varbinary", { name: "PlaceHolder", nullable: true, length: 300 })
-  placeHolder: Buffer | null;
+  @Column("character varying", {
+    name: "PlaceHolder",
+    nullable: true,
+    length: 100,
+  })
+  placeHolder: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "Editable", default: () => "(1)" })
+  @Column("boolean", { name: "Editable", default: () => "true" })
   editable: boolean;
 
   @AutoMap()
-  @Column("bit", { name: "Required", default: () => "(0)" })
+  @Column("boolean", { name: "Required", default: () => "false" })
   required: boolean;
 
   @AutoMap()
-  @Column("varchar", { name: "Type", nullable: true, length: 200 })
+  @Column("character varying", { name: "Type", nullable: true, length: 200 })
   type: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Source", nullable: true })
+  @Column("text", { name: "Source", nullable: true })
   source: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "CratedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   cratedDate: Date | null;
 
@@ -54,10 +58,10 @@ export class SectionHeaders {
   createdBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "ModifiedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
 

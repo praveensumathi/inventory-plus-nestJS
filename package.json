@@ -11,8 +11,8 @@
     "start:dev": "env-cmd -f ./environments/.dev.env nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "scaffoldingdb:local-db": "npx typeorm-model-generator -h localhost -d ProPlus -u sa -x root -e mssql -o ./src/migration --noConfig true",
-    "scaffoldingdb:dev-db": "npx typeorm-model-generator -h 117.218.92.111 -p 1433 -d ProPlus -u sa -x root -e mssql -o ./src/migration --noConfig true"
+    "scaffoldingdb:local-db": "npx typeorm-model-generator -h localhost -d PropertyPulse -u postgres -x root -e postgres -o ./src/migration --noConfig true",
+    "scaffoldingdb:dev-db": "npx typeorm-model-generator -h 117.218.92.111 -p 5432 -d PropertyPulse -u postgres -x root -e postgres -o ./src/migration --noConfig true"
   },
   "dependencies": {
     "@automapper/classes": "^8.8.1",
@@ -28,10 +28,10 @@
     "@nestjs/typeorm": "^10.0.2",
     "bcrypt": "^5.1.1",
     "env-cmd": "^10.1.0",
-    "mssql": "^10.0.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "pg": "^8.13.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",

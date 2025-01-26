@@ -19,7 +19,7 @@ import { classes } from "@automapper/classes";
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: "mssql",
+      type: "postgres",
       host: process.env.POSTGRES_HOST,
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
@@ -27,9 +27,6 @@ import { classes } from "@automapper/classes";
       port: parseInt(process.env.POSTGRES_PORT),
       logging: process.env.MODE == "DEV",
       entities: ["dist/entities/*.js"],
-      options: {
-        trustServerCertificate: true,
-      },
     }),
     AutomapperModule.forRoot({
       strategyInitializer: classes(),

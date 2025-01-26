@@ -11,35 +11,39 @@ import { AutoMap } from "@automapper/classes";
 import { SectionHeaders } from "./SectionHeaders";
 import { Inspections } from "./Inspections";
 
-@Index("PK_Sections", ["id"], { unique: true })
-@Entity("Sections", { schema: "dbo" })
+@Index("Sections_pkey", ["id"], { unique: true })
+@Entity("Sections", { schema: "public" })
 export class Sections {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
   @AutoMap()
-  @Column("varchar", { name: "Name", nullable: true, length: 200 })
+  @Column("character varying", { name: "Name", nullable: true, length: 200 })
   name: string | null;
 
   @AutoMap()
-  @Column("varbinary", { name: "BlockType", nullable: true, length: 100 })
-  blockType: Buffer | null;
+  @Column("character varying", {
+    name: "BlockType",
+    nullable: true,
+    length: 100,
+  })
+  blockType: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "UUID", nullable: true, length: 100 })
+  @Column("character varying", { name: "UUID", nullable: true, length: 100 })
   uuid: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "HideOnReport", default: () => "(0)" })
+  @Column("boolean", { name: "HideOnReport", default: () => "false" })
   hideOnReport: boolean;
 
   @AutoMap()
-  @Column("bit", { name: "SkipReferenceNumber", default: () => "(0)" })
+  @Column("boolean", { name: "SkipReferenceNumber", default: () => "false" })
   skipReferenceNumber: boolean;
 
   @AutoMap()
-  @Column("varchar", { name: "Status", nullable: true })
+  @Column("text", { name: "Status", nullable: true })
   status: string | null;
 
   @AutoMap()
@@ -47,10 +51,10 @@ export class Sections {
   createdBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "CreatedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdDate: Date | null;
 
@@ -59,10 +63,10 @@ export class Sections {
   modifiedBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "ModifiedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
 

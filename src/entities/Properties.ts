@@ -11,83 +11,107 @@ import { AutoMap } from "@automapper/classes";
 import { Inspections } from "./Inspections";
 import { Clients } from "./Clients";
 
-@Index("PK_Properties", ["id"], { unique: true })
-@Entity("Properties", { schema: "dbo" })
+@Index("Properties_pkey", ["id"], { unique: true })
+@Entity("Properties", { schema: "public" })
 export class Properties {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
   @AutoMap()
-  @Column("varchar", { name: "Ref", nullable: true, length: 50 })
+  @Column("character varying", { name: "Ref", nullable: true, length: 50 })
   ref: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "AddressLine1", nullable: true, length: 500 })
+  @Column("character varying", {
+    name: "AddressLine1",
+    nullable: true,
+    length: 500,
+  })
   addressLine1: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "AddressLine2", nullable: true, length: 500 })
+  @Column("character varying", {
+    name: "AddressLine2",
+    nullable: true,
+    length: 500,
+  })
   addressLine2: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "City", nullable: true, length: 100 })
+  @Column("character varying", { name: "City", nullable: true, length: 100 })
   city: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "County", nullable: true, length: 100 })
+  @Column("character varying", { name: "County", nullable: true, length: 100 })
   county: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "PostCode", nullable: true, length: 50 })
+  @Column("character varying", { name: "PostCode", nullable: true, length: 50 })
   postCode: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Country", nullable: true, length: 200 })
+  @Column("character varying", { name: "Country", nullable: true, length: 100 })
   country: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Latitude", nullable: true, length: 50 })
+  @Column("character varying", { name: "Latitude", nullable: true, length: 50 })
   latitude: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Longitude", nullable: true, length: 50 })
+  @Column("character varying", {
+    name: "Longitude",
+    nullable: true,
+    length: 50,
+  })
   longitude: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "FurnishedType", nullable: true, length: 100 })
+  @Column("character varying", {
+    name: "FurnishedType",
+    nullable: true,
+    length: 100,
+  })
   furnishedType: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "PropertyType", nullable: true, length: 200 })
+  @Column("character varying", {
+    name: "PropertyType",
+    nullable: true,
+    length: 200,
+  })
   propertyType: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "DetachmentType", nullable: true, length: 50 })
+  @Column("character varying", {
+    name: "DetachmentType",
+    nullable: true,
+    length: 50,
+  })
   detachmentType: string | null;
 
   @AutoMap()
-  @Column("tinyint", { name: "NoOfBeds", nullable: true })
+  @Column("smallint", { name: "NoOfBeds", nullable: true })
   noOfBeds: number | null;
 
   @AutoMap()
-  @Column("tinyint", { name: "NoOfBaths", nullable: true })
+  @Column("smallint", { name: "NoOfBaths", nullable: true })
   noOfBaths: number | null;
 
   @AutoMap()
-  @Column("tinyint", { name: "NoOfGarages", nullable: true })
+  @Column("smallint", { name: "NoOfGarages", nullable: true })
   noOfGarages: number | null;
 
   @AutoMap()
-  @Column("bit", { name: "HasParking", nullable: true })
+  @Column("boolean", { name: "HasParking", nullable: true })
   hasParking: boolean | null;
 
   @AutoMap()
-  @Column("bit", { name: "HasGarden", nullable: true })
+  @Column("boolean", { name: "HasGarden", nullable: true })
   hasGarden: boolean | null;
 
   @AutoMap()
-  @Column("varchar", { name: "UPRN", nullable: true, length: 100 })
+  @Column("character varying", { name: "UPRN", nullable: true, length: 100 })
   uprn: string | null;
 
   @AutoMap()
@@ -95,15 +119,19 @@ export class Properties {
   parentPropertyId: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "notes", nullable: true, length: 500 })
+  @Column("character varying", { name: "notes", nullable: true, length: 500 })
   notes: string | null;
 
   @AutoMap()
-  @Column("nvarchar", { name: "tags", nullable: true })
+  @Column("text", { name: "tags", nullable: true })
   tags: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "EPCRating", nullable: true, length: 50 })
+  @Column("character varying", {
+    name: "EPCRating",
+    nullable: true,
+    length: 50,
+  })
   epcRating: string | null;
 
   @AutoMap()
@@ -111,10 +139,10 @@ export class Properties {
   createdBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "CreatedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdDate: Date | null;
 
@@ -123,15 +151,15 @@ export class Properties {
   modifiedBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "ModifiedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
 
   @AutoMap()
-  @Column("bit", { name: "IsActive", default: () => "(0)" })
+  @Column("boolean", { name: "IsActive", default: () => "false" })
   isActive: boolean;
 
   @OneToMany(() => Inspections, (inspections) => inspections.property)

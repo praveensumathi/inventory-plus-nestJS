@@ -30,7 +30,7 @@ export class CustomerService {
         Customers,
       );
 
-      customerEntity = this.customerRepository.create(customerEntity);
+      customerEntity = await this.customerRepository.save(customerEntity);
 
       if (customerEntity.id == "0") {
         return ResponseFactory.error("Error While Save Customer", 5001);

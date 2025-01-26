@@ -34,10 +34,20 @@ export class UsersService {
           Users,
         );
 
-        //TODO : Need to remove this
-        var hashedPassword = await PasswordUtil.generateHash("demo");
+        var userExists = await this.userRepo.findOne({
+          where: { customer: { id: userRequestDto.customerId } },
+        });
 
-        userEntity.password = hashedPassword;
+        if (isNotEmpty(userExists)) {
+          return ResponseFactory.error(
+            "User with this email already exists on this company",
+          );
+        }
+
+        //TODO : Need to remove this
+        // var hashedPassword = await PasswordUtil.generateHash("demo");
+
+        // userEntity.password = hashedPassword;
 
         var customerEntity = await this.customeRepo.findOne({
           where: { id: userRequestDto.customerId },
@@ -54,12 +64,24 @@ export class UsersService {
           return ResponseFactory.error();
         }
 
-        return ResponseFactory.success();
+        return ResponseFactory.success(userEntity);
       }
 
       return ResponseFactory.error("Error While Create User");
     } catch (error) {
       return ResponseFactory.error("Error While Create User");
     }
+  }
+
+  async findUserByEmail(email: string) {
+    email = email.trim().toLowerCase();
+    var userEntity = await this.userRepo.findOne({
+      where: {
+        email: email,
+      },
+      relations: ["customer"],
+    });
+
+    return userEntity;
   }
 }

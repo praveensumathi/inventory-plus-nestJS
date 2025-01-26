@@ -5,30 +5,30 @@ import {
   UseGuards,
   Request,
   Get,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { signInDto } from './dto/auth-request.dto';
-import { CustomResponse } from 'src/common/dto/common-response';
+} from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { signInDto } from "./dto/auth-request.dto";
+import { CustomResponse } from "src/common/dto/common-response";
 import {
   ApiBearerAuth,
   ApiExtraModels,
   ApiResponse,
   getSchemaPath,
-} from '@nestjs/swagger';
-import { signInResponseDto, UserDto } from './dto/auth-response.dto';
-import { Public, Roles } from 'src/decorator';
-import { LocalAuthGuard } from './guards';
+} from "@nestjs/swagger";
+import { signInResponseDto, LoggedInUserDto } from "./dto/auth-response.dto";
+import { Public, Roles } from "src/decorator";
+import { LocalAuthGuard } from "./guards";
 
 @ApiBearerAuth()
-@Controller('auth')
+@Controller("auth")
 @ApiExtraModels(CustomResponse, signInResponseDto)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('login')
+  @Post("login")
   @ApiResponse({
     status: 200,
-    description: 'Login successful',
+    description: "Login successful",
     schema: {
       allOf: [
         { $ref: getSchemaPath(CustomResponse) },
@@ -43,25 +43,25 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Public()
   async login(@Request() req, @Body() signInDto: signInDto) {
-    var loggedInUser: UserDto = req.user;
+    var loggedInUser: LoggedInUserDto = req.user;
     return this.authService.login(loggedInUser);
   }
 
-  @Get('profile')
-  @Roles(['admin', 'manager'])
+  @Get("profile")
+  @Roles(["admin", "manager"])
   getProfile(@Request() req) {
     return req.user;
   }
 
-  @Get('manager')
-  @Roles(['manager'])
+  @Get("manager")
+  @Roles(["manager"])
   getManagerRole() {
-    return 'manager role';
+    return "manager role";
   }
 
-  @Get('public-api')
+  @Get("public-api")
   @Public()
   getPublicData() {
-    return 'public data no auth needed';
+    return "public data no auth needed";
   }
 }

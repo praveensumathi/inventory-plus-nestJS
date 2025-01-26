@@ -9,8 +9,8 @@ import { AutoMap } from "@automapper/classes";
 import { Contacts } from "./Contacts";
 import { Inspections } from "./Inspections";
 
-@Index("PK_InspectionContacts", ["id"], { unique: true })
-@Entity("InspectionContacts", { schema: "dbo" })
+@Index("InspectionContacts_pkey", ["id"], { unique: true })
+@Entity("InspectionContacts", { schema: "public" })
 export class InspectionContacts {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })

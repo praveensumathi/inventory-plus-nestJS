@@ -16,7 +16,7 @@ export class UsersController {
   @ApiResponse({ type: CustomResponse })
   async addUser(
     @Body() createUserRequestDto: CreateUserRequestDto,
-  ): Promise<CustomResponse> {
+  ): Promise<CustomResponse<Users>> {
     const response = await this.usersService.addUser(createUserRequestDto);
     return response;
   }

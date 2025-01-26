@@ -9,8 +9,8 @@ import {
 import { AutoMap } from "@automapper/classes";
 import { Customers } from "./Customers";
 
-@Index("PK_Users", ["id"], { unique: true })
-@Entity("Users", { schema: "dbo" })
+@Index("Users_pkey", ["id"], { unique: true })
+@Entity("Users", { schema: "public" })
 export class Users {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
@@ -21,75 +21,95 @@ export class Users {
   roleId: number;
 
   @AutoMap()
-  @Column("varchar", { name: "Title", nullable: true, length: 20 })
+  @Column("character varying", { name: "Title", nullable: true, length: 20 })
   title: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Name", nullable: true, length: 250 })
+  @Column("character varying", { name: "Name", nullable: true, length: 250 })
   name: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Email", nullable: true, length: 250 })
+  @Column("character varying", { name: "Email", nullable: true, length: 250 })
   email: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "ProfileUrl", nullable: true, length: 800 })
+  @Column("character varying", {
+    name: "ProfileUrl",
+    nullable: true,
+    length: 800,
+  })
   profileUrl: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Telephone", nullable: true, length: 50 })
+  @Column("character varying", {
+    name: "Telephone",
+    nullable: true,
+    length: 50,
+  })
   telephone: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Mobile", nullable: true, length: 50 })
+  @Column("character varying", { name: "Mobile", nullable: true, length: 50 })
   mobile: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Note", nullable: true })
+  @Column("character varying", { name: "Note", nullable: true, length: 1000 })
   note: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "EmailNotification", default: () => "(1)" })
+  @Column("boolean", { name: "EmailNotification", default: () => "true" })
   emailNotification: boolean;
 
   @AutoMap()
-  @Column("bit", { name: "CreateInspection", default: () => "(1)" })
+  @Column("boolean", { name: "CreateInspection", default: () => "true" })
   createInspection: boolean;
 
   @AutoMap()
-  @Column("varchar", { name: "AddressLine1", nullable: true, length: 500 })
+  @Column("character varying", {
+    name: "AddressLine1",
+    nullable: true,
+    length: 500,
+  })
   addressLine1: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "AddressLine2", nullable: true, length: 500 })
+  @Column("character varying", {
+    name: "AddressLine2",
+    nullable: true,
+    length: 500,
+  })
   addressLine2: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "City", nullable: true, length: 100 })
+  @Column("character varying", { name: "City", nullable: true, length: 100 })
   city: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "County", nullable: true, length: 100 })
+  @Column("character varying", { name: "County", nullable: true, length: 100 })
   county: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "PostCode", nullable: true, length: 50 })
+  @Column("character varying", { name: "PostCode", nullable: true, length: 50 })
   postCode: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Country", nullable: true, length: 200 })
+  @Column("character varying", { name: "Country", nullable: true, length: 200 })
   country: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Password", nullable: true, length: 1000 })
+  @Column("character varying", {
+    name: "Password",
+    nullable: true,
+    length: 1000,
+  })
   password: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Token", nullable: true, length: 3000 })
+  @Column("character varying", { name: "Token", nullable: true, length: 3000 })
   token: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "Status", default: () => "(0)" })
+  @Column("boolean", { name: "Status", default: () => "false" })
   status: boolean;
 
   @AutoMap()
@@ -97,10 +117,10 @@ export class Users {
   createdBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "CreateDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createDate: Date | null;
 
@@ -109,10 +129,10 @@ export class Users {
   modifiedBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "ModifiedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
 

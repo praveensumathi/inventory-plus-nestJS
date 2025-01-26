@@ -12,39 +12,51 @@ import { InspectionContacts } from "./InspectionContacts";
 import { Properties } from "./Properties";
 import { Sections } from "./Sections";
 
-@Index("PK_Inspection", ["id"], { unique: true })
-@Entity("Inspections", { schema: "dbo" })
+@Index("Inspections_pkey", ["id"], { unique: true })
+@Entity("Inspections", { schema: "public" })
 export class Inspections {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
   @AutoMap()
-  @Column("varchar", { name: "InspectionName", nullable: true, length: 100 })
+  @Column("character varying", {
+    name: "InspectionName",
+    nullable: true,
+    length: 100,
+  })
   inspectionName: string | null;
 
   @AutoMap()
-  @Column("tinyint", { name: "Template", nullable: true })
+  @Column("smallint", { name: "Template", nullable: true })
   template: number | null;
 
   @AutoMap()
-  @Column("tinyint", { name: "InspectionType", nullable: true })
+  @Column("smallint", { name: "InspectionType", nullable: true })
   inspectionType: number | null;
 
   @AutoMap()
-  @Column("tinyint", { name: "LocationOfKeys", nullable: true })
+  @Column("smallint", { name: "LocationOfKeys", nullable: true })
   locationOfKeys: number | null;
 
   @AutoMap()
-  @Column("nchar", { name: "KeyReturnINstruction", nullable: true, length: 10 })
+  @Column("character", {
+    name: "KeyReturnINstruction",
+    nullable: true,
+    length: 10,
+  })
   keyReturnINstruction: string | null;
 
   @AutoMap()
-  @Column("nchar", { name: "Notes", nullable: true, length: 10 })
+  @Column("character varying", { name: "Notes", nullable: true, length: 500 })
   notes: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "State", length: 50, default: () => "(100)" })
+  @Column("character varying", {
+    name: "State",
+    length: 50,
+    default: () => "'100'",
+  })
   state: string;
 
   @AutoMap()
@@ -52,10 +64,10 @@ export class Inspections {
   createdBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "CreatedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdDate: Date | null;
 
@@ -64,10 +76,10 @@ export class Inspections {
   modifiedBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "ModifiedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
 

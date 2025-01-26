@@ -9,27 +9,23 @@ import { AutoMap } from "@automapper/classes";
 import { Clients } from "./Clients";
 import { Users } from "./Users";
 
-@Index("PK_Customer", ["id"], { unique: true })
-@Entity("Customers", { schema: "dbo" })
+@Index("Customers_pkey", ["id"], { unique: true })
+@Entity("Customers", { schema: "public" })
 export class Customers {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
   @AutoMap()
-  @Column("varchar", { name: "Name", nullable: true, length: 100 })
+  @Column("character varying", { name: "Name", nullable: true, length: 100 })
   name: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Address", nullable: true, length: 3500 })
-  address: string | null;
-
-  @AutoMap()
-  @Column("varchar", { name: "Phone", nullable: true, length: 20 })
+  @Column("character varying", { name: "Phone", nullable: true, length: 20 })
   phone: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "Active", nullable: true, default: () => "(1)" })
+  @Column("boolean", { name: "Active", nullable: true, default: () => "true" })
   active: boolean | null;
 
   @AutoMap()
@@ -37,10 +33,10 @@ export class Customers {
   createdBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "CreatedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdDate: Date | null;
 
@@ -49,12 +45,44 @@ export class Customers {
   modifiedBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "ModifiedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
+
+  @AutoMap()
+  @Column("character varying", {
+    name: "AddressLine1",
+    nullable: true,
+    length: 500,
+  })
+  addressLine1: string | null;
+
+  @AutoMap()
+  @Column("character varying", {
+    name: "AddressLine2",
+    nullable: true,
+    length: 500,
+  })
+  addressLine2: string | null;
+
+  @AutoMap()
+  @Column("character varying", { name: "City", nullable: true, length: 100 })
+  city: string | null;
+
+  @AutoMap()
+  @Column("character varying", { name: "County", nullable: true, length: 100 })
+  county: string | null;
+
+  @AutoMap()
+  @Column("character varying", { name: "PostCode", nullable: true, length: 50 })
+  postCode: string | null;
+
+  @AutoMap()
+  @Column("character varying", { name: "Country", nullable: true, length: 100 })
+  country: string | null;
 
   @OneToMany(() => Clients, (clients) => clients.customer)
   clients: Clients[];

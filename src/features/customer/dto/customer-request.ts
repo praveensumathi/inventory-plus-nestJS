@@ -10,9 +10,29 @@ export class BaseCustomerDto {
   @AutoMap()
   phone: string;
 
-  @ApiProperty({ description: "The address of the customer" })
   @AutoMap()
-  address: string;
+  @ApiProperty()
+  addressLine1: string | null;
+
+  @AutoMap()
+  @ApiProperty()
+  addressLine2: string | null;
+
+  @AutoMap()
+  @ApiProperty()
+  city: string | null;
+
+  @AutoMap()
+  @ApiProperty()
+  county: string | null;
+
+  @AutoMap()
+  @ApiProperty()
+  postCode: string | null;
+
+  @AutoMap()
+  @ApiProperty()
+  country: string | null;
 }
 
 export class CreateCustomerDto extends BaseCustomerDto {}

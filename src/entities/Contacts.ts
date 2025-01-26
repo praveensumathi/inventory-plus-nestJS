@@ -8,39 +8,39 @@ import {
 import { AutoMap } from "@automapper/classes";
 import { InspectionContacts } from "./InspectionContacts";
 
-@Index("PK_Contacts", ["id"], { unique: true })
-@Entity("Contacts", { schema: "dbo" })
+@Index("Contacts_pkey", ["id"], { unique: true })
+@Entity("Contacts", { schema: "public" })
 export class Contacts {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
   @AutoMap()
-  @Column("varchar", { name: "Name", nullable: true, length: 100 })
+  @Column("character varying", { name: "Name", nullable: true, length: 100 })
   name: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Type", nullable: true, length: 50 })
+  @Column("character varying", { name: "Type", nullable: true, length: 50 })
   type: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Email", nullable: true, length: 100 })
+  @Column("character varying", { name: "Email", nullable: true, length: 100 })
   email: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "phone", nullable: true, length: 20 })
+  @Column("character varying", { name: "phone", nullable: true, length: 20 })
   phone: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "Signee", default: () => "(0)" })
+  @Column("boolean", { name: "Signee", default: () => "false" })
   signee: boolean;
 
   @AutoMap()
-  @Column("bit", { name: "Notify", default: () => "(0)" })
+  @Column("boolean", { name: "Notify", default: () => "false" })
   notify: boolean;
 
   @AutoMap()
-  @Column("bit", { name: "Deliver", default: () => "(0)" })
+  @Column("boolean", { name: "Deliver", default: () => "false" })
   deliver: boolean;
 
   @AutoMap()
@@ -48,10 +48,10 @@ export class Contacts {
   createdBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "CreatedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   createdDate: Date | null;
 
@@ -60,10 +60,10 @@ export class Contacts {
   modifiedBy: string | null;
 
   @AutoMap()
-  @Column("datetime", {
+  @Column("timestamp without time zone", {
     name: "ModifiedDate",
     nullable: true,
-    default: () => "getdate()",
+    default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
 

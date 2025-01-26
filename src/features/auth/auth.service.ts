@@ -1,19 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
-import { signInResponseDto, UserDto } from "./dto/auth-response.dto";
+import { signInResponseDto, LoggedInUserDto } from "./dto/auth-response.dto";
 import {
   CustomResponse,
   ResponseFactory,
 } from "src/common/dto/common-response";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { isNotEmpty, PasswordUtil } from "src/common/utils";
 
 export type JWTPayloadType = {
-  sub: number;
+  sub: string;
   userName: string;
-  roles: string[];
-  iat: number;
+  role: number;
+  iat?: number;
+  customerId: string;
 };
 
 @Injectable()
@@ -23,36 +23,43 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(user: UserDto): Promise<CustomResponse<signInResponseDto>> {
+  async login(
+    user: LoggedInUserDto,
+  ): Promise<CustomResponse<signInResponseDto>> {
     const payload = {
       sub: user.id,
-      userName: user.userName,
-      roles: user.roles,
+      userName: user.name,
+      role: user.role,
+      customerId: user.customerId,
     } as JWTPayloadType;
 
     var token = this.jwtService.sign(payload);
 
     var data: signInResponseDto = {
       accessToken: token,
-      userData: {
-        id: user.id,
-        roles: payload.roles,
-        userName: user.userName,
-      },
+      userData: user,
     };
 
     return ResponseFactory.success(data);
   }
 
-  async validateUser(username: string, pass: string): Promise<UserDto> {
-    // const user = await this.usersService.findOne(username);
+  async validateUser(email: string, pass: string): Promise<LoggedInUserDto> {
+    const userEntity = await this.usersService.findUserByEmail(email);
 
-    // //TODO
-    // //use bcrypt to check passwords
-    // if (user && user.password === pass) {
-    //   const { password, ...result } = user;
-    //   return result as UserDto;
-    // }
+    if (isNotEmpty(userEntity)) {
+      var passwordIsMatched = await PasswordUtil.validatePassword(
+        pass,
+        userEntity.password,
+      );
+      if (passwordIsMatched) {
+        return {
+          id: userEntity.id,
+          name: userEntity.name,
+          role: userEntity.roleId,
+          customerId: userEntity.customer.id,
+        } as LoggedInUserDto;
+      }
+    }
     return null;
   }
 }

@@ -58,8 +58,10 @@ export class CreateUserRequestDto {
   county: string | null;
 
   @AutoMap()
+  @ApiProperty()
   postCode: string | null;
 
   @AutoMap()
+  @ApiProperty()
   country: string | null;
 }
