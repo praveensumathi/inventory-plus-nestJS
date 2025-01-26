@@ -23,19 +23,23 @@ export class CustomerService {
   async addCustomer(
     customerDto: CreateCustomerDto,
   ): Promise<CustomResponse<Customers>> {
-    var customerEntity = this.mapper.map(
-      customerDto,
-      CreateCustomerDto,
-      Customers,
-    );
+    try {
+      var customerEntity = this.mapper.map(
+        customerDto,
+        CreateCustomerDto,
+        Customers,
+      );
 
-    customerEntity = this.customerRepository.create(customerEntity);
+      customerEntity = this.customerRepository.create(customerEntity);
 
-    if (customerEntity.id == "0") {
-      return ResponseFactory.error("Error While Save Customer", 5001);
+      if (customerEntity.id == "0") {
+        return ResponseFactory.error("Error While Save Customer", 5001);
+      }
+
+      return ResponseFactory.success(customerEntity);
+    } catch (error) {
+      return ResponseFactory.error(error.message);
     }
-
-    return ResponseFactory.success(customerEntity);
   }
 
   async getCustomerById(
@@ -56,7 +60,7 @@ export class CustomerService {
 
       return ResponseFactory.success(customerInfo);
     } catch (error) {
-      return ResponseFactory.error("Error While Create Customer");
+      return ResponseFactory.error(error.message);
     }
   }
 }

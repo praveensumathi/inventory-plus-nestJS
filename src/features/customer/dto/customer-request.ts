@@ -18,7 +18,6 @@ export class BaseCustomerDto {
 export class CreateCustomerDto extends BaseCustomerDto {}
 
 export class UpdateCustomerDto extends BaseCustomerDto {
-  @ApiPropertyOptional()
   @ApiProperty({ description: "The unique identifier of the customer" })
   @AutoMap()
   id: string;

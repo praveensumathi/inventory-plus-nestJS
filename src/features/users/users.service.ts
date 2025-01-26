@@ -34,6 +34,7 @@ export class UsersService {
           Users,
         );
 
+        //TODO : Need to remove this
         var hashedPassword = await PasswordUtil.generateHash("demo");
 
         userEntity.password = hashedPassword;

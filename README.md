@@ -2,9 +2,9 @@
 
 Commands to create a new resource
 
-# Inventory Plus
+# Pre requisite
 
-Commands to create a new resource
+node version >20
 
 ## Installation
 
@@ -12,10 +12,6 @@ Install the CLI globally using the npm install -g command
 
 ```bash
   npm install -g @nestjs/cli
-
-  cd project-folder-name
-
-  npm i or npm i -f
 ```
 
 clone the project and,

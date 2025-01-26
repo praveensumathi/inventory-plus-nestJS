@@ -30,7 +30,6 @@ import { classes } from "@automapper/classes";
       options: {
         trustServerCertificate: true,
       },
-      //synchronize: true,
     }),
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
