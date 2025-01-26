@@ -45,20 +45,36 @@ export class Users {
   note: string | null;
 
   @AutoMap()
-  @Column("varchar", { name: "Address", nullable: true })
-  address: string | null;
+  @Column("bit", { name: "EmailNotification", default: () => "(1)" })
+  emailNotification: boolean;
 
   @AutoMap()
-  @Column("bit", { name: "Status", default: () => "(0)" })
-  status: boolean;
+  @Column("bit", { name: "CreateInspection", default: () => "(1)" })
+  createInspection: boolean;
 
   @AutoMap()
-  @Column("bit", { name: "EmailNotification", nullable: true })
-  emailNotification: boolean | null;
+  @Column("varchar", { name: "AddressLine1", nullable: true, length: 500 })
+  addressLine1: string | null;
 
   @AutoMap()
-  @Column("bit", { name: "CreateInspection", nullable: true })
-  createInspection: boolean | null;
+  @Column("varchar", { name: "AddressLine2", nullable: true, length: 500 })
+  addressLine2: string | null;
+
+  @AutoMap()
+  @Column("varchar", { name: "City", nullable: true, length: 100 })
+  city: string | null;
+
+  @AutoMap()
+  @Column("varchar", { name: "County", nullable: true, length: 100 })
+  county: string | null;
+
+  @AutoMap()
+  @Column("varchar", { name: "PostCode", nullable: true, length: 50 })
+  postCode: string | null;
+
+  @AutoMap()
+  @Column("varchar", { name: "Country", nullable: true, length: 200 })
+  country: string | null;
 
   @AutoMap()
   @Column("varchar", { name: "Password", nullable: true, length: 1000 })
@@ -67,6 +83,10 @@ export class Users {
   @AutoMap()
   @Column("varchar", { name: "Token", nullable: true, length: 3000 })
   token: string | null;
+
+  @AutoMap()
+  @Column("bit", { name: "Status", default: () => "(0)" })
+  status: boolean;
 
   @AutoMap()
   @Column("bigint", { name: "CreatedBy", nullable: true })
