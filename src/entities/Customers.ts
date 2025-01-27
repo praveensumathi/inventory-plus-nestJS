@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { AutoMap } from "@automapper/classes";
 import { Clients } from "./Clients";
-import { Users } from "./Users";
+import { CustomerUsers } from "./CustomerUsers";
 
 @Index("Customers_pkey", ["id"], { unique: true })
 @Entity("Customers", { schema: "public" })
@@ -87,6 +87,6 @@ export class Customers {
   @OneToMany(() => Clients, (clients) => clients.customer)
   clients: Clients[];
 
-  @OneToMany(() => Users, (users) => users.customer)
-  users: Users[];
+  @OneToMany(() => CustomerUsers, (customerUsers) => customerUsers.customer)
+  customerUsers: CustomerUsers[];
 }

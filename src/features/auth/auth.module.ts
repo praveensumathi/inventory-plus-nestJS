@@ -7,7 +7,7 @@ import { AppService } from "src/app.service";
 import { JwtStrategy, LocalStrategy } from "./strategy";
 import { UsersModule } from "../users/users.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Customers, Properties, Users } from "src/entities";
+import { Customers, CustomerUsers, Properties, Users } from "src/entities";
 import { UsersService } from "../users/users.service";
 
 @Module({
@@ -23,7 +23,7 @@ import { UsersService } from "../users/users.service";
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Properties, Users, Customers]),
+    TypeOrmModule.forFeature([Properties, Users, Customers, CustomerUsers]),
   ],
   controllers: [AuthController],
   providers: [

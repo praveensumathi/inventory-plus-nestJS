@@ -7,13 +7,20 @@ import {
   ResponseFactory,
 } from "src/common/dto/common-response";
 import { isNotEmpty, PasswordUtil } from "src/common/utils";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Users } from "src/entities";
+import { Repository } from "typeorm";
 
 export type JWTPayloadType = {
   sub: string;
   userName: string;
-  role: number;
   iat?: number;
-  customerId: string;
+  userCustomers?: [
+    {
+      customerId: string;
+      roleId: number;
+    },
+  ];
 };
 
 @Injectable()
@@ -21,11 +28,15 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    @InjectRepository(Users)
+    private readonly userRepo: Repository<Users>,
   ) {}
 
   async login(
     user: LoggedInUserDto,
   ): Promise<CustomResponse<signInResponseDto>> {
+    // var userCustomers = this.userRepo.findBy();
+
     const payload = {
       sub: user.id,
       userName: user.name,
@@ -56,7 +67,7 @@ export class AuthService {
           id: userEntity.id,
           name: userEntity.name,
           role: userEntity.roleId,
-          customerId: userEntity.customer.id,
+          customerId: "0",
         } as LoggedInUserDto;
       }
     }

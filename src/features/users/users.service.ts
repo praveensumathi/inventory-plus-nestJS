@@ -10,6 +10,7 @@ import {
   ResponseFactory,
 } from "src/common/dto/common-response";
 import { isNotEmpty } from "src/common/utils/common-util";
+import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
 
 @Injectable()
@@ -18,14 +19,14 @@ export class UsersService {
     @InjectRepository(Users)
     private readonly userRepo: Repository<Users>,
     @InjectRepository(Customers)
-    private readonly customeRepo: Repository<Customers>,
+    private readonly customerRepo: Repository<Customers>,
+    @InjectRepository(CustomerUsers)
+    private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,
   ) {}
 
-  async addUser(
-    userRequestDto: CreateUserRequestDto,
-  ): Promise<CustomResponse<Users>> {
+  async addUser(userRequestDto: CreateUserRequestDto): Promise<CustomResponse> {
     try {
       if (isNotEmpty(userRequestDto)) {
         var userEntity = this.mapper.map(
@@ -34,37 +35,44 @@ export class UsersService {
           Users,
         );
 
-        var userExists = await this.userRepo.findOne({
-          where: { customer: { id: userRequestDto.customerId } },
+        var existUser = await this.userRepo.findOne({
+          where: { email: userEntity.email.toString().toLowerCase() },
+          select: {
+            id: true,
+          },
         });
 
-        if (isNotEmpty(userExists)) {
-          return ResponseFactory.error(
-            "User with this email already exists on this company",
-          );
+        if (isNotEmpty(existUser)) {
+          var customerUser = await this.customerUsersRepo.findOne({
+            where: {
+              customer: { id: userRequestDto.customerId },
+              user: { id: existUser.id },
+            },
+          });
+          if (isNotEmpty(customerUser)) {
+            return ResponseFactory.error("User Already Under the Customer");
+          }
+
+          await this.customerUsersRepo.save({
+            customer: { id: userRequestDto.customerId },
+            user: { id: userEntity.id },
+          });
+
+          return ResponseFactory.success();
         }
 
         //TODO : Need to remove this
-        // var hashedPassword = await PasswordUtil.generateHash("demo");
-
-        // userEntity.password = hashedPassword;
-
-        var customerEntity = await this.customeRepo.findOne({
-          where: { id: userRequestDto.customerId },
-        });
-
-        if (!isNotEmpty(customerEntity)) {
-          return ResponseFactory.error("Customer not found");
-        }
-        userEntity.customer = customerEntity;
+        var hashedPassword = await PasswordUtil.generateHash("demo");
+        userEntity.password = hashedPassword;
 
         userEntity = await this.userRepo.save(userEntity);
 
-        if (userEntity.id == "" || userEntity.id == "0") {
-          return ResponseFactory.error();
-        }
+        await this.customerUsersRepo.save({
+          customer: { id: userRequestDto.customerId },
+          user: { id: userEntity.id },
+        });
 
-        return ResponseFactory.success(userEntity);
+        return ResponseFactory.success();
       }
 
       return ResponseFactory.error("Error While Create User");

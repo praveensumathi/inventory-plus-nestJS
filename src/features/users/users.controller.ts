@@ -3,7 +3,6 @@ import { UsersService } from "./users.service";
 import { ApiBearerAuth, ApiBody, ApiResponse } from "@nestjs/swagger";
 import { CreateUserRequestDto } from "./dto/user.request";
 import { CustomResponse } from "src/common/dto/common-response";
-import { Users } from "src/entities";
 import { Public } from "src/decorator";
 
 @ApiBearerAuth()
@@ -16,7 +15,7 @@ export class UsersController {
   @ApiResponse({ type: CustomResponse })
   async addUser(
     @Body() createUserRequestDto: CreateUserRequestDto,
-  ): Promise<CustomResponse<Users>> {
+  ): Promise<CustomResponse> {
     const response = await this.usersService.addUser(createUserRequestDto);
     return response;
   }

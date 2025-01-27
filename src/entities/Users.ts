@@ -2,12 +2,11 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { AutoMap } from "@automapper/classes";
-import { Customers } from "./Customers";
+import { CustomerUsers } from "./CustomerUsers";
 
 @Index("Users_pkey", ["id"], { unique: true })
 @Entity("Users", { schema: "public" })
@@ -136,7 +135,6 @@ export class Users {
   })
   modifiedDate: Date | null;
 
-  @ManyToOne(() => Customers, (customers) => customers.users)
-  @JoinColumn([{ name: "CustomerId", referencedColumnName: "id" }])
-  customer: Customers;
+  @OneToMany(() => CustomerUsers, (customerUsers) => customerUsers.user)
+  customerUsers: CustomerUsers[];
 }

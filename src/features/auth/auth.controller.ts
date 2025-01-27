@@ -48,7 +48,6 @@ export class AuthController {
   }
 
   @Get("profile")
-  @Roles(["admin", "manager"])
   getProfile(@Request() req) {
     return req.user;
   }

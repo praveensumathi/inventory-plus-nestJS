@@ -42,3 +42,16 @@ export function isNotEmpty<T>(value: T): boolean {
 
   return true;
 }
+
+/**
+ *This custom function, getPropertyName, is a TypeScript utility 
+ that helps retrieve the name of a property from a given object in a type-safe manner.
+ */
+export function getPropertyName<T extends object>(
+  o: T,
+  expression: (x: { [Property in keyof T]: string }) => string,
+) {
+  const res = {} as { [Property in keyof T]: string };
+  Object.keys(o).map((k) => (res[k as keyof T] = k));
+  return expression(res);
+}

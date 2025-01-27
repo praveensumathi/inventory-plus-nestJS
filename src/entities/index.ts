@@ -6,6 +6,7 @@ import { Inspections } from "./Inspections";
 import { SectionHeaders } from "./SectionHeaders";
 import { Sections } from "./Sections";
 import { Users } from "./Users";
+import { CustomerUsers } from "./CustomerUsers";
 
 export {
   Properties,
@@ -16,4 +17,5 @@ export {
   SectionHeaders,
   Sections,
   Users,
+  CustomerUsers,
 };
