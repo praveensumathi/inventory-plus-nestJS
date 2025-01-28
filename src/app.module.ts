@@ -15,6 +15,7 @@ import { JwtAuthGuard } from "./features/auth/guards";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
+import { ClientModule } from './features/client/client.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { classes } from "@automapper/classes";
     PropertyModule,
     CustomerModule,
     UsersModule,
+    ClientModule,
   ],
   controllers: [AppController],
   providers: [

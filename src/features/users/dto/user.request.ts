@@ -1,7 +1,8 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
+import { PartialType } from "@nestjs/swagger";
 
-export class CreateUserRequestDto {
+export class BaseUserRequestDto {
   @AutoMap()
   @ApiProperty()
   roleId: number;
@@ -64,4 +65,12 @@ export class CreateUserRequestDto {
   @AutoMap()
   @ApiProperty()
   country: string | null;
+}
+
+export class CreateUserRequestDto extends PartialType(BaseUserRequestDto) {}
+
+export class UpdateUserRequestDto extends PartialType(BaseUserRequestDto) {
+  @AutoMap()
+  @ApiProperty({ required: true })
+  id: string;
 }
