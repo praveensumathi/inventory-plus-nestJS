@@ -52,7 +52,6 @@ import { EmailService } from "./services/mail/email.service";
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    EmailService,
   ],
 })
 export class AppModule {}
