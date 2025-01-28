@@ -15,12 +15,7 @@ export type JWTPayloadType = {
   sub: string;
   userName: string;
   iat?: number;
-  userCustomers?: [
-    {
-      customerId: string;
-      roleId: number;
-    },
-  ];
+  email: string;
 };
 
 @Injectable()
@@ -33,22 +28,26 @@ export class AuthService {
   ) {}
 
   async login(
-    user: LoggedInUserDto,
+    loggedInUser: LoggedInUserDto,
   ): Promise<CustomResponse<signInResponseDto>> {
-    // var userCustomers = this.userRepo.findBy();
+    var userCustomersWithRole = await this.usersService.getUserCustomerList(
+      loggedInUser.id,
+    );
 
     const payload = {
-      sub: user.id,
-      userName: user.name,
-      role: user.role,
-      customerId: user.customerId,
+      sub: loggedInUser.id,
+      userName: loggedInUser.name,
+      email: loggedInUser.email,
     } as JWTPayloadType;
 
     var token = this.jwtService.sign(payload);
 
     var data: signInResponseDto = {
       accessToken: token,
-      userData: user,
+      userData: {
+        ...loggedInUser,
+        userCustomers: userCustomersWithRole,
+      },
     };
 
     return ResponseFactory.success(data);
@@ -66,8 +65,7 @@ export class AuthService {
         return {
           id: userEntity.id,
           name: userEntity.name,
-          role: userEntity.roleId,
-          customerId: "0",
+          email: userEntity.email,
         } as LoggedInUserDto;
       }
     }

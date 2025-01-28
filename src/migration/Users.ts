@@ -16,10 +16,6 @@ export class Users {
   id: string;
 
   @AutoMap()
-  @Column("smallint", { name: "RoleId" })
-  roleId: number;
-
-  @AutoMap()
   @Column("character varying", { name: "Title", nullable: true, length: 20 })
   title: string | null;
 

@@ -12,6 +12,8 @@ import {
 import { isNotEmpty } from "src/common/utils/common-util";
 import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
+import { UserCustomers } from "../auth/dto/auth-response.dto";
+import { RolesEnum } from "src/common/enums/enum";
 
 @Injectable()
 export class UsersService {
@@ -50,12 +52,15 @@ export class UsersService {
             },
           });
           if (isNotEmpty(customerUser)) {
-            return ResponseFactory.error("User Already Under the Customer");
+            return ResponseFactory.error(
+              "User Already Exists Under the Customer",
+            );
           }
 
           await this.customerUsersRepo.save({
             customer: { id: userRequestDto.customerId },
-            user: { id: userEntity.id },
+            user: { id: existUser.id },
+            roleId: userRequestDto.roleId,
           });
 
           return ResponseFactory.success();
@@ -87,9 +92,37 @@ export class UsersService {
       where: {
         email: email,
       },
-      relations: ["customer"],
     });
 
     return userEntity;
+  }
+
+  async getUserCustomerList(userId: string): Promise<UserCustomers[]> {
+    var userWithListOfCustomerAndRole = await this.customerUsersRepo.find({
+      where: {
+        user: { id: userId },
+      },
+      relations: {
+        customer: true,
+      },
+      select: {
+        roleId: true,
+        customer: {
+          id: true,
+          name: true,
+        },
+      },
+    });
+
+    var userCustomersWithRole = userWithListOfCustomerAndRole.map((item) => {
+      return new UserCustomers({
+        customerId: item.customer.id,
+        customerName: item.customer.name,
+        roleId: item.roleId,
+        roleName: RolesEnum[item.roleId],
+      });
+    });
+
+    return userCustomersWithRole;
   }
 }

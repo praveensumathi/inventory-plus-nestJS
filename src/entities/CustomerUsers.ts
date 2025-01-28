@@ -17,6 +17,10 @@ export class CustomerUsers {
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
 
+  @AutoMap()
+  @Column("smallint", { name: "RoleId", nullable: true })
+  roleId: number | null;
+
   @ManyToOne(() => Customers, (customers) => customers.customerUsers)
   @JoinColumn([{ name: "CustomerId", referencedColumnName: "id" }])
   customer: Customers;
