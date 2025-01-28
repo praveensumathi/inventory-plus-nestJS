@@ -1,25 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
-import { SendEmailDto } from './dto/send-email.dto';
-
+import { Injectable } from "@nestjs/common";
+import { MailerService } from "@nestjs-modules/mailer";
+import {
+  SendMultipleEmailModel,
+  SendSingleEmailModel,
+} from "./model/send-email.model";
+import { SentMessageInfo } from "nodemailer";
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) { }
+  constructor(private readonly mailerService: MailerService) {}
 
-  async sendEmail(createEmailDto: SendEmailDto): Promise<string> {
-    const { email, name, toMail: to_mail, mailSubject: mail_subject, template, context } = createEmailDto;
+  async sendEmail(emailModel: SendSingleEmailModel): Promise<SentMessageInfo> {
+    const { data, toMail, mailSubject, template } = emailModel;
 
     const emailSent = await this.mailerService.sendMail({
-      to: to_mail,
-      from: `"Support Team" <${email}>`, // override default from
-      subject: mail_subject,
-      template: 'welcome', // `.hbs` extension is appended automatically
-      context: {
-        name,
-      },
+      to: toMail,
+      subject: mailSubject,
+      template: template,
+      context: data,
     });
 
-    return 'email sent';
+    return emailSent;
+  }
+
+  async sendEmails(
+    emailModel: SendMultipleEmailModel,
+  ): Promise<SentMessageInfo> {
+    const { toMails, data, mailSubject, template } = emailModel;
+
+    const emailSent = await this.mailerService.sendMail({
+      to: toMails,
+      subject: mailSubject,
+      template: template,
+      context: data,
+    });
+
+    return emailSent;
   }
 }

@@ -9,18 +9,17 @@ import {
 } from "@nestjs/common";
 import { ClientService } from "./client.service";
 import { CreateClientDto } from "./dto/create-client.dto";
-import { UpdateClientDto } from "./dto/update-client.dto";
 import { UpdateUserRequestDto } from "../users/dto/user.request";
-import { SendEmailDto } from "src/services/mail/dto/send-email.dto";
 import { EmailService } from "src/services/mail/email.service";
 import { Public } from "src/decorator";
+import { SendSingleEmailModel } from "src/services/mail/model/send-email.model";
 
 @Controller("client")
 export class ClientController {
   constructor(
     private readonly clientService: ClientService,
     private readonly emailService: EmailService,
-  ) { }
+  ) {}
 
   @Post()
   create(@Body() createClientDto: CreateClientDto) {
@@ -52,14 +51,14 @@ export class ClientController {
 
   @Public()
   @Post("email")
-  async sendEmail(@Body() sendEmailDto: SendEmailDto): Promise<string> {
-
-
-    const transformedDto: SendEmailDto = {
-      ...sendEmailDto,
-      toMail: "kumuthac23@gmail.com",
+  async sendEmail(): Promise<boolean> {
+    const transformedDto: SendSingleEmailModel = {
+      toMail: "praveen.r@deventure.co",
       mailSubject: "New client registration",
       template: "welcome",
+      data: {
+        name: "Praveen",
+      },
     };
 
     return this.emailService.sendEmail(transformedDto);
