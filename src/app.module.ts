@@ -15,7 +15,8 @@ import { JwtAuthGuard } from "./features/auth/guards";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
-import { ClientModule } from './features/client/client.module';
+import { ClientModule } from "./features/client/client.module";
+import { EmailService } from "./services/mail/email.service";
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { ClientModule } from './features/client/client.module';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    EmailService,
   ],
 })
 export class AppModule {}
