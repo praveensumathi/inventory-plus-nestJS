@@ -11,10 +11,16 @@ import { ClientService } from "./client.service";
 import { CreateClientDto } from "./dto/create-client.dto";
 import { UpdateClientDto } from "./dto/update-client.dto";
 import { UpdateUserRequestDto } from "../users/dto/user.request";
+import { SendEmailDto } from "src/services/mail/dto/send-email.dto";
+import { EmailService } from "src/services/mail/email.service";
+import { Public } from "src/decorator";
 
 @Controller("client")
 export class ClientController {
-  constructor(private readonly clientService: ClientService) {}
+  constructor(
+    private readonly clientService: ClientService,
+    private readonly emailService: EmailService,
+  ) { }
 
   @Post()
   create(@Body() createClientDto: CreateClientDto) {
@@ -42,5 +48,20 @@ export class ClientController {
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.clientService.remove(+id);
+  }
+
+  @Public()
+  @Post("email")
+  async sendEmail(@Body() sendEmailDto: SendEmailDto): Promise<string> {
+
+
+    const transformedDto: SendEmailDto = {
+      ...sendEmailDto,
+      toMail: "kumuthac23@gmail.com",
+      mailSubject: "New client registration",
+      template: "welcome",
+    };
+
+    return this.emailService.sendEmail(transformedDto);
   }
 }

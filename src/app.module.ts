@@ -17,6 +17,7 @@ import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from "@automapper/classes";
 import { ClientModule } from "./features/client/client.module";
 import { EmailService } from "./services/mail/email.service";
+import { EmailModule } from "./services/mail/email.module";
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { EmailService } from "./services/mail/email.service";
     CustomerModule,
     UsersModule,
     ClientModule,
+    EmailModule
   ],
   controllers: [AppController],
   providers: [
@@ -54,4 +56,5 @@ import { EmailService } from "./services/mail/email.service";
     },
   ],
 })
-export class AppModule {}
+
+export class AppModule { }
