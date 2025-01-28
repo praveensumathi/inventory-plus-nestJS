@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, Get, Req } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { ApiBearerAuth, ApiBody, ApiResponse } from "@nestjs/swagger";
 import { CreateUserRequestDto } from "./dto/user.request";
 import { CustomResponse } from "src/common/dto/common-response";
 import { Public } from "src/decorator";
+import { Request } from "express";
 
 @ApiBearerAuth()
 @Controller("users")

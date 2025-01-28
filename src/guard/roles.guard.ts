@@ -4,9 +4,9 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { Roles } from 'src/decorator/roles.decorator';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Roles } from "src/decorator/roles.decorator";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -21,14 +21,14 @@ export class RolesGuard implements CanActivate {
     const user = request.user;
 
     if (!user) {
-      throw new HttpException('Forbidden', HttpStatus.UNAUTHORIZED);
+      throw new HttpException("Forbidden", HttpStatus.UNAUTHORIZED);
     }
 
     const hasRequiredRole = this.matchRoles(requiredRoles, user.roles);
 
     if (!hasRequiredRole) {
       throw new HttpException(
-        'Forbidden: You do not have the required permissions',
+        "Forbidden: You do not have the required permissions",
         HttpStatus.FORBIDDEN,
       );
     }

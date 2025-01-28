@@ -27,6 +27,7 @@
     "@nestjs/swagger": "^8.1.0",
     "@nestjs/typeorm": "^10.0.2",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
     "env-cmd": "^10.1.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
+    "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.0",
     "@types/node": "^20.3.1",
     "@types/passport-jwt": "^4.0.1",

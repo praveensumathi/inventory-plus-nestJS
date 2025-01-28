@@ -1,16 +1,14 @@
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-// import { registerAutoMapDecorators } from "./utils/automap-utility";
-// import * as path from "path";
 import "reflect-metadata";
+import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  //registerAutoMapDecorators(path.join(__dirname, "./entities"));
-
   app.enableCors();
+  app.use(cookieParser());
 
   const config = new DocumentBuilder()
     .setTitle("Inventory Plus")

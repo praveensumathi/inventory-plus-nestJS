@@ -54,7 +54,9 @@ export class AuthService {
   }
 
   async validateUser(email: string, pass: string): Promise<LoggedInUserDto> {
-    const userEntity = await this.usersService.findUserByEmail(email);
+    const userEntity = await this.usersService.findUserByEmail(
+      email.toLowerCase().trim(),
+    );
 
     if (isNotEmpty(userEntity)) {
       var passwordIsMatched = await PasswordUtil.validatePassword(

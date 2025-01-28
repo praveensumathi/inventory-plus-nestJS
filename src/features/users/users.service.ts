@@ -66,9 +66,8 @@ export class UsersService {
           return ResponseFactory.success();
         }
 
-        //TODO : Need to remove this
-        var hashedPassword = await PasswordUtil.generateHash("demo");
-        userEntity.password = hashedPassword;
+        var resetToken = await PasswordUtil.generateResetToken();
+        userEntity.token = resetToken;
 
         userEntity = await this.userRepo.save(userEntity);
 

@@ -33,4 +33,19 @@ export class PasswordUtil {
 
     return bcrypt.compare(password, hash);
   }
+
+  /**
+   * Generate a random bcrypt-hashed reset token.
+   * @returns {Promise<string>}
+   */
+  static async generateResetToken(): Promise<string> {
+    // Generate a random string using Math.random()
+    const plainToken = Array.from({ length: 40 }, () =>
+      Math.floor(Math.random() * 36).toString(36),
+    ).join("");
+
+    const hashedToken = await bcrypt.hash(plainToken, this.SALT_ROUNDS);
+
+    return hashedToken;
+  }
 }
