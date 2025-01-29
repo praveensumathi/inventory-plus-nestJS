@@ -14,6 +14,8 @@ import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
 import { UserCustomers } from "../auth/dto/auth-response.dto";
 import { RolesEnum } from "src/common/enums/enum";
+import { PaginationRequest } from "src/common/dto/pagination-request";
+import { IPaginationOptions, paginate, Pagination } from "nestjs-typeorm-paginate";
 
 @Injectable()
 export class UsersService {
@@ -26,7 +28,7 @@ export class UsersService {
     private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,
-  ) {}
+  ) { }
 
   async addUser(userRequestDto: CreateUserRequestDto): Promise<CustomResponse> {
     try {
@@ -124,4 +126,42 @@ export class UsersService {
 
     return userCustomersWithRole;
   }
+
+  async getUsers(paginationRequest: PaginationRequest, customerId: string): Promise<Pagination<Users>> {
+    try {
+
+      const customerUserQueryBuilder = this.customerUsersRepo.createQueryBuilder("customerUser")
+        .select("customerUser.userId")
+        .where("customerUser.customerId = :customerId", { customerId });
+
+      const matchedUserIdResponse = await customerUserQueryBuilder.getRawMany();
+      const userIds = matchedUserIdResponse.map((item: any) => item.userId);
+
+
+      // Step 3: Query users based on userIds
+      const userQueryBuilder = this.userRepo.createQueryBuilder("users")
+        .select(["users.id", "users.email", "users.name"])
+        .where("users.id IN (:...userIds)", { userIds });
+
+      // Step 4: Apply search filter if provided
+      if (paginationRequest.searchTerm) {
+        userQueryBuilder.andWhere(
+          "(users.email ILIKE :searchTerm OR users.firstName ILIKE :searchTerm OR users.lastName ILIKE :searchTerm)",
+          { searchTerm: `%${paginationRequest.searchTerm}%` }
+        );
+      }
+
+      // Step 5: Apply pagination
+      const options: IPaginationOptions = {
+        page: paginationRequest.page,
+        limit: paginationRequest.limit,
+      };
+
+      const response = await paginate(userQueryBuilder, options);
+      return { items: response.items, meta: response.meta };
+    } catch (error) {
+      throw new Error(`Error fetching users: ${error.message}`);
+    }
+  }
+
 }

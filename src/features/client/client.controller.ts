@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req } from "@nestjs/common";
+import { Controller, Post, Body, Req, Query } from "@nestjs/common";
 import { ClientService } from "./client.service";
 import { EmailService } from "src/services/mail/email.service";
 import { Cookies, Public } from "src/decorator";
@@ -7,6 +7,7 @@ import { ApiBearerAuth } from "@nestjs/swagger";
 import { Request } from "express";
 import { ClientDto } from "./dto/create-client.dto";
 import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
+import { PaginationRequest } from "src/common/dto/pagination-request";
 
 @ApiBearerAuth()
 @Controller("client")
@@ -26,9 +27,8 @@ export class ClientController {
   }
 
   @Post("get")
-  getClients(@Req() req: Request) {
-    req.cookies.se;
-    return this.clientService.getClients();
+  getClients(@Req() req: Request, @Query() query: PaginationRequest) {
+    return this.clientService.getClients(query);
   }
 
   @Public()

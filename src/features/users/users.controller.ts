@@ -1,9 +1,11 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, Query, Req } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
 import { CreateUserRequestDto } from "./dto/user.request";
 import { CustomResponse } from "src/common/dto/common-response";
-import { Public } from "src/decorator";
+import { Cookies, Public } from "src/decorator";
+import { PaginationRequest } from "src/common/dto/pagination-request";
+import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
 
 @ApiBearerAuth()
 @Controller("users")
@@ -18,5 +20,14 @@ export class UsersController {
   ): Promise<CustomResponse> {
     const response = await this.usersService.addUser(createUserRequestDto);
     return response;
+  }
+
+  @Post("get")
+  getUsers(
+    @Req() req: Request,
+    @Query() query: PaginationRequest,
+    @Cookies(COOKIE_CUSTOMER_ID) customerId: string 
+  ) {
+    return this.usersService.getUsers(query, customerId);
   }
 }
