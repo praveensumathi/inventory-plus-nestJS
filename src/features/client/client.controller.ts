@@ -14,7 +14,7 @@ export class ClientController {
   constructor(
     private readonly clientService: ClientService,
     private readonly emailService: EmailService,
-  ) {}
+  ) { }
 
   @Post("save")
   create(
@@ -28,7 +28,7 @@ export class ClientController {
   @Post("get")
   getClients(@Req() req: Request) {
     req.cookies.se;
-    return true;
+    return this.clientService.getClients();
   }
 
   @Public()

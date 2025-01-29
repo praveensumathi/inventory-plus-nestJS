@@ -19,7 +19,7 @@ export class ClientService {
     private readonly clientsRepo: Repository<Clients>,
     @InjectMapper()
     private readonly mapper: Mapper,
-  ) {}
+  ) { }
 
   async save(
     clientDto: ClientDto,
@@ -49,5 +49,8 @@ export class ClientService {
     } catch (error) {
       return ResponseFactory.error(error.message);
     }
+  }
+  async getClients() {
+
   }
 }
