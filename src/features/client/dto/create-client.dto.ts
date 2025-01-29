@@ -1,7 +1,10 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty, PartialType } from "@nestjs/swagger";
 
-export class BaseClientDto {
+export class ClientDto {
+  @AutoMap()
+  @ApiProperty()
+  id?: string;
   @AutoMap()
   @ApiProperty()
   title?: string;
@@ -79,10 +82,7 @@ export class BaseClientDto {
   @AutoMap()
   @ApiProperty()
   notes?: string;
-}
-
-export class CreateClientDto extends PartialType(BaseClientDto) {
   @AutoMap()
-  @ApiProperty({ required: true })
+  @ApiProperty()
   customerId: string;
 }

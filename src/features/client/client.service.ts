@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { UpdateClientDto } from "./dto/update-client.dto";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Clients, Customers } from "src/entities";
+import { Clients } from "src/entities";
 import { Repository } from "typeorm";
-import { CreateClientDto } from "./dto/create-client.dto";
+import { ClientDto } from "./dto/create-client.dto";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 import { Request } from "express";
@@ -21,50 +20,23 @@ export class ClientService {
     private readonly mapper: Mapper,
   ) {}
 
-  async create(
-    createClientDto: CreateClientDto,
-    req: Request,
-  ): Promise<CustomResponse> {
+  async save(clientDto: ClientDto, req: Request): Promise<CustomResponse> {
     try {
-      console.log(createClientDto);
+      var clientEntity = this.mapper.map(clientDto, ClientDto, Clients);
 
-      var newClientEntity = this.mapper.map(
-        createClientDto,
-        CreateClientDto,
-        Clients,
-      );
+      if (clientEntity.id == null || clientEntity.id == undefined) {
+        clientEntity.createdBy = req.user["sub"];
+      } else {
+        clientEntity.modifiedBy = req.user["sub"];
+        delete clientEntity.customer.id;
+      }
+      clientEntity = await this.clientsRepo.save(clientEntity);
 
-      newClientEntity.createdBy = req.user["sub"];
-
-      console.log(newClientEntity);
-
-      newClientEntity = await this.clientsRepo.save(newClientEntity);
       return ResponseFactory.success();
     } catch (error) {
       console.log(error);
 
       return ResponseFactory.error("Error while Save Client");
-    }
-  }
-
-  async update(
-    id: string,
-    updateClientDto: UpdateClientDto,
-    req: Request,
-  ): Promise<CustomResponse> {
-    try {
-      var result = await this.clientsRepo.update(id, {
-        ...updateClientDto,
-        modifiedBy: req.user["sub"],
-      });
-
-      if (result.affected > 0) {
-        return ResponseFactory.success();
-      }
-
-      return ResponseFactory.error("Error While Update Client");
-    } catch (error) {
-      return ResponseFactory.error("Error While Update Client");
     }
   }
 
