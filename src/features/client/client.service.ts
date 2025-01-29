@@ -10,6 +10,7 @@ import {
   CustomResponse,
   ResponseFactory,
 } from "src/common/dto/common-response";
+import { CREATE_ID } from "src/common/constants/constants";
 
 @Injectable()
 export class ClientService {
@@ -20,35 +21,33 @@ export class ClientService {
     private readonly mapper: Mapper,
   ) {}
 
-  async save(clientDto: ClientDto, req: Request): Promise<CustomResponse> {
+  async save(
+    clientDto: ClientDto,
+    customerId: string,
+    req: Request,
+  ): Promise<CustomResponse> {
     try {
-      var clientEntity = this.mapper.map(clientDto, ClientDto, Clients);
+      var clientEntity = await this.clientsRepo.findOne({
+        where: {
+          id: clientDto.id,
+        },
+      });
 
-      if (clientEntity.id == null || clientEntity.id == undefined) {
+      clientEntity ??= new Clients();
+
+      if (clientDto.id == CREATE_ID) {
+        clientEntity = this.mapper.map(clientDto, ClientDto, Clients);
         clientEntity.createdBy = req.user["sub"];
+        clientEntity.customer.id = customerId;
       } else {
+        this.mapper.mutate(clientDto, clientEntity, ClientDto, Clients);
         clientEntity.modifiedBy = req.user["sub"];
-        delete clientEntity.customer.id;
       }
       clientEntity = await this.clientsRepo.save(clientEntity);
 
-      return ResponseFactory.success();
+      return ResponseFactory.success(clientEntity);
     } catch (error) {
-      console.log(error);
-
-      return ResponseFactory.error("Error while Save Client");
+      return ResponseFactory.error(error.message);
     }
-  }
-
-  findAll() {
-    return `This action returns all client`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} client`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} client`;
   }
 }

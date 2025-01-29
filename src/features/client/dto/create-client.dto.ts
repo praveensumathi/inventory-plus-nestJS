@@ -82,7 +82,4 @@ export class ClientDto {
   @AutoMap()
   @ApiProperty()
   notes?: string;
-  @AutoMap()
-  @ApiProperty()
-  customerId: string;
 }

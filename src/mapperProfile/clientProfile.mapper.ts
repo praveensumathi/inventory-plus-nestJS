@@ -1,6 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
-import { createMap, Mapper, MappingProfile } from "@automapper/core";
+import {
+  createMap,
+  forMember,
+  mapFrom,
+  Mapper,
+  MappingProfile,
+} from "@automapper/core";
 import { Clients } from "src/entities";
 import { ClientDto } from "src/features/client/dto/create-client.dto";
 
