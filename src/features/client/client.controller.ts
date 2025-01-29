@@ -8,22 +8,22 @@ import {
   Delete,
 } from "@nestjs/common";
 import { ClientService } from "./client.service";
-import { CreateClientDto } from "./dto/create-client.dto";
 import { UpdateUserRequestDto } from "../users/dto/user.request";
 import { EmailService } from "src/services/mail/email.service";
 import { Public } from "src/decorator";
 import { SendSingleEmailModel } from "src/services/mail/model/send-email.model";
+import { CreateUpdateClientDto } from "./dto/create-client.dto";
 
 @Controller("client")
 export class ClientController {
   constructor(
     private readonly clientService: ClientService,
     private readonly emailService: EmailService,
-  ) {}
+  ) { }
 
   @Post()
-  create(@Body() createClientDto: CreateClientDto) {
-    return this.clientService.create(createClientDto);
+  createAndUpdateClient(@Body() createClientDto: CreateUpdateClientDto) {
+    return this.clientService.saveClient(createClientDto);
   }
 
   @Get()
