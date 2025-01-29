@@ -6,24 +6,29 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  Put,
 } from "@nestjs/common";
 import { ClientService } from "./client.service";
 import { UpdateUserRequestDto } from "../users/dto/user.request";
 import { EmailService } from "src/services/mail/email.service";
 import { Public } from "src/decorator";
 import { SendSingleEmailModel } from "src/services/mail/model/send-email.model";
-import { CreateUpdateClientDto } from "./dto/create-client.dto";
+import { ApiBearerAuth } from "@nestjs/swagger";
+import { CreateClientDto } from "./dto/create-client.dto";
+import { Request } from "express";
 
+@ApiBearerAuth()
 @Controller("client")
 export class ClientController {
   constructor(
     private readonly clientService: ClientService,
     private readonly emailService: EmailService,
-  ) { }
+  ) {}
 
-  @Post()
-  createAndUpdateClient(@Body() createClientDto: CreateUpdateClientDto) {
-    return this.clientService.saveClient(createClientDto);
+  @Post("createClient")
+  create(@Req() req: Request, @Body() createClientDto: CreateClientDto) {
+    return this.clientService.create(createClientDto, req);
   }
 
   @Get()
@@ -31,17 +36,18 @@ export class ClientController {
     return this.clientService.findAll();
   }
 
-  @Get(":id")
+  @Get("getClient/:id")
   findOne(@Param("id") id: string) {
     return this.clientService.findOne(+id);
   }
 
-  @Patch(":id")
+  @Put("updateClient/:id")
   update(
     @Param("id") id: string,
     @Body() updateClientDto: UpdateUserRequestDto,
+    @Req() req: Request,
   ) {
-    return this.clientService.update(+id, updateClientDto);
+    return this.clientService.update(id, updateClientDto, req);
   }
 
   @Delete(":id")
