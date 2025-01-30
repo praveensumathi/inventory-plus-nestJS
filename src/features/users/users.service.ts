@@ -3,7 +3,7 @@ import { InjectMapper } from "@automapper/nestjs";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Customers, Users } from "src/entities";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { CreateUserRequestDto } from "./dto/user.request";
 import {
   CustomResponse,
@@ -15,7 +15,11 @@ import { PasswordUtil } from "src/common/utils";
 import { UserCustomers } from "../auth/dto/auth-response.dto";
 import { RolesEnum } from "src/common/enums/enum";
 import { PaginationRequest } from "src/common/dto/pagination-request";
-import { IPaginationOptions, paginate, Pagination } from "nestjs-typeorm-paginate";
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from "nestjs-typeorm-paginate";
 
 @Injectable()
 export class UsersService {
@@ -127,38 +131,55 @@ export class UsersService {
     return userCustomersWithRole;
   }
 
-  async getUsers(paginationRequest: PaginationRequest, customerId: string): Promise<Pagination<Users>> {
+  async getUsers(
+    paginationRequest: PaginationRequest,
+    customerId: string,
+  ): Promise<Pagination<Users>> {
     try {
+      const searchCondition = Like(`%${paginationRequest.searchTerm}%`);
+      const matchedUsers = await this.customerUsersRepo.findAndCount({
+        where: {
+          customer: { id: customerId },
+          user: {
+            email: searchCondition,
+            name: searchCondition,
+            mobile: searchCondition,
+          },
+        },
+        relations: ["user"],
+        select: {
+          user: {
+            id: true,
+            email: true,
+            name: true,
+            mobile: true,
+          },
+        },
+        take: paginationRequest.limit,
+        skip: (paginationRequest.page - 1) * paginationRequest.limit,
+      });
+      return paginateResponse(matchedUsers, paginationRequest.page, paginationRequest.limit);
 
-      const customerUserQueryBuilder = this.customerUsersRepo.createQueryBuilder("customerUser")
-        .select(`"customerUser"."UserId"`)
-        .where(`"customerUser"."CustomerId" = :customerId`, { customerId });
-
-      const matchedUserIdResponse = await customerUserQueryBuilder.getRawMany();
-      const userIds = matchedUserIdResponse.map((item: any) => item.UserId);
-
-
-      const userQueryBuilder = this.userRepo.createQueryBuilder("users")
-        .select(["users.id", "users.email", "users.name", "users.mobile"])
-        .where("users.id IN (:...userIds)", { userIds });
-
-      if (paginationRequest.searchTerm) {
-        userQueryBuilder.andWhere(
-          "(users.email ILIKE :searchTerm OR users.firstName ILIKE :searchTerm OR users.lastName ILIKE :searchTerm)",
-          { searchTerm: `%${paginationRequest.searchTerm}%` }
-        );
-      }
-
-      const options: IPaginationOptions = {
-        page: paginationRequest.page,
-        limit: paginationRequest.limit,
-      };
-
-      const response = await paginate(userQueryBuilder, options);
-      return { items: response.items, meta: response.meta };
     } catch (error) {
       throw new Error(`Error fetching users: ${error.message}`);
     }
   }
 
+}
+
+function paginateResponse<T>(data:T, page:number, limit:number):Pagination<T> {
+  const [result, total] = data;
+  const lastPage = Math.ceil(total / limit);
+  const nextPage = page + 1 > lastPage ? null : page + 1;
+  const prevPage = page - 1 < 1 ? null : page - 1;
+  return {
+    statusCode: 'success',
+    items: [...result],
+    meta:{}
+    count: total,
+    currentPage: page,
+    nextPage: nextPage,
+    prevPage: prevPage,
+    lastPage: lastPage,
+  }
 }
