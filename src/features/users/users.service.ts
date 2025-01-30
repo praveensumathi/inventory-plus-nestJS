@@ -9,7 +9,7 @@ import {
   CustomResponse,
   ResponseFactory,
 } from "src/common/dto/common-response";
-import { isNotEmpty } from "src/common/utils/common-util";
+import { getPropertyName, isNotEmpty } from "src/common/utils/common-util";
 import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
 import { UserCustomers } from "../auth/dto/auth-response.dto";
@@ -144,7 +144,9 @@ export class UsersService {
             mobile: searchCondition,
           },
         },
-        relations: ["user"],
+        relations: [
+          `${getPropertyName(new CustomerUsers(), (prop) => prop.user)}`,
+        ],
         select: {
           user: {
             id: true,
