@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, Query } from "@nestjs/common";
+import { Controller, Post, Body, Req } from "@nestjs/common";
 import { ClientService } from "./client.service";
 import { EmailService } from "src/services/mail/email.service";
 import { Cookies, Public } from "src/decorator";
@@ -27,7 +27,7 @@ export class ClientController {
   }
 
   @Post("get")
-  getClients(@Req() req: Request, @Query() query: PaginationRequest) {
+  getClients(@Req() req: Request, @Body() query: PaginationRequest) {
     return this.clientService.getClients(query);
   }
 

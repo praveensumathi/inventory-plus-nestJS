@@ -1,6 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import { PartialType } from "@nestjs/swagger";
+import { PaginationRequest } from "src/common/dto/pagination-request";
 
 export class BaseUserRequestDto {
   @AutoMap()
@@ -67,10 +68,12 @@ export class BaseUserRequestDto {
   country: string | null;
 }
 
-export class CreateUserRequestDto extends PartialType(BaseUserRequestDto) {}
+export class CreateUserRequestDto extends PartialType(BaseUserRequestDto) { }
 
 export class UpdateUserRequestDto extends PartialType(BaseUserRequestDto) {
   @AutoMap()
   @ApiProperty({ required: true })
   id: string;
 }
+
+export class GetUserRequestDto extends PaginationRequest { }

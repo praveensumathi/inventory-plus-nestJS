@@ -16,6 +16,7 @@ import { UserCustomers } from "../auth/dto/auth-response.dto";
 import { RolesEnum } from "src/common/enums/enum";
 import { PaginationRequest } from "src/common/dto/pagination-request";
 import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
+import { paginateResponse } from "src/common/utils/pagination-util";
 
 @Injectable()
 export class UsersService {
@@ -28,7 +29,7 @@ export class UsersService {
     private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,
-  ) {}
+  ) { }
 
   async addUser(userRequestDto: CreateUserRequestDto): Promise<CustomResponse> {
     try {
@@ -131,21 +132,29 @@ export class UsersService {
     paginationRequest: PaginationRequest,
     customerId: string,
   ): Promise<Pagination<CustomerUsers, IPaginationMeta>> {
+    const { page, take, searchTerm } = paginationRequest
+
     try {
-      const searchCondition = Like(`%${paginationRequest.searchTerm}%`);
-      const skip = (paginationRequest.page - 1) * paginationRequest.take;
+
+      const whereCondition: any = {
+        customer: { id: customerId },
+      };
+
+      if (searchTerm) {
+        const searchCondition = Like(`%${searchTerm}%`);
+        whereCondition.user = [
+          { email: searchCondition },
+          { name: searchCondition },
+          { mobile: searchCondition },
+        ];
+      }
+
+      const skip = (page - 1) * take;
 
       const data = await this.customerUsersRepo.findAndCount({
-        where: {
-          customer: { id: customerId },
-          user: {
-            email: searchCondition,
-            name: searchCondition,
-            mobile: searchCondition,
-          },
-        },
+        where: whereCondition,
         relations: [
-          `${getPropertyName(new CustomerUsers(), (prop) => prop.user)}`,
+          'user'
         ],
         select: {
           user: {
@@ -155,14 +164,14 @@ export class UsersService {
             mobile: true,
           },
         },
-        take: paginationRequest.take,
+        take: take,
         skip: skip,
       });
 
       return paginateResponse(
         data,
-        paginationRequest.page,
-        paginationRequest.take,
+        page,
+        take,
       );
     } catch (error) {
       throw new Error(`Error fetching users: ${error.message}`);
@@ -170,22 +179,3 @@ export class UsersService {
   }
 }
 
-function paginateResponse<T>(
-  data: [result: T[], total: number],
-  page: number,
-  take: number,
-): Pagination<T, IPaginationMeta> {
-  const [result, total] = data;
-  const totalPages = Math.ceil(total / take);
-
-  return {
-    items: result,
-    meta: {
-      totalItems: total,
-      currentPage: page,
-      totalPages,
-      itemsPerPage: take,
-      itemCount: result.length,
-    },
-  };
-}
