@@ -1,11 +1,11 @@
 export class PaginationRequest {
   page: number;
-  limit: number;
+  take: number;
   searchTerm?: string;
 
-  constructor(page: number = 1, limit: number = 10, searchTerm?: string) {
+  constructor(page: number = 1, take: number = 10, searchTerm?: string) {
     this.page = page;
-    this.limit = limit;
+    this.take = take;
     this.searchTerm = searchTerm;
   }
 }

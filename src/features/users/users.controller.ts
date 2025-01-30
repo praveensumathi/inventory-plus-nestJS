@@ -24,9 +24,8 @@ export class UsersController {
 
   @Post("get")
   getUsers(
-    @Req() req: Request,
-    @Query() query: PaginationRequest,
-    @Cookies(COOKIE_CUSTOMER_ID) customerId: string 
+    @Body() query: PaginationRequest,
+    @Cookies(COOKIE_CUSTOMER_ID) customerId: string,
   ) {
     return this.usersService.getUsers(query, customerId);
   }

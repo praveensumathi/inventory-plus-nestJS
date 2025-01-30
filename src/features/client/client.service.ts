@@ -11,7 +11,11 @@ import {
   ResponseFactory,
 } from "src/common/dto/common-response";
 import { CREATE_ID } from "src/common/constants/constants";
-import { paginate, Pagination, IPaginationOptions } from "nestjs-typeorm-paginate";
+import {
+  paginate,
+  Pagination,
+  IPaginationOptions,
+} from "nestjs-typeorm-paginate";
 import { PaginationRequest } from "src/common/dto/pagination-request";
 
 @Injectable()
@@ -21,7 +25,7 @@ export class ClientService {
     private readonly clientsRepo: Repository<Clients>,
     @InjectMapper()
     private readonly mapper: Mapper,
-  ) { }
+  ) {}
 
   async save(
     clientDto: ClientDto,
@@ -53,25 +57,31 @@ export class ClientService {
     }
   }
 
-  async getClients(paginationRequest: PaginationRequest): Promise<Pagination<Clients>> {
+  async getClients(
+    paginationRequest: PaginationRequest,
+  ): Promise<Pagination<Clients>> {
     try {
-      const queryBuilder = this.clientsRepo.createQueryBuilder("clients").select(['clients.name', 'clients.email','clients.telephone'])
+      const queryBuilder = this.clientsRepo
+        .createQueryBuilder("clients")
+        .select(["clients.name", "clients.email", "clients.telephone"]);
 
       if (paginationRequest.searchTerm) {
-        queryBuilder.where("clients.name ILIKE :searchTerm OR clients.email ILIKE :searchTerm", {
-          searchTerm: `%${paginationRequest.searchTerm}%`,
-        });
+        queryBuilder.where(
+          "clients.name ILIKE :searchTerm OR clients.email ILIKE :searchTerm",
+          {
+            searchTerm: `%${paginationRequest.searchTerm}%`,
+          },
+        );
       }
       const options: IPaginationOptions = {
         page: paginationRequest.page,
-        limit: paginationRequest.limit,
+        limit: paginationRequest.take,
       };
 
       const response = await paginate(queryBuilder, options);
       return { items: response.items, meta: response.meta };
     } catch (error) {
       throw new Error(`Error fetching clients: ${error.message}`);
+    }
   }
-  }
-
 }

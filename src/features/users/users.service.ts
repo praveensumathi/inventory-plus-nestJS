@@ -15,11 +15,7 @@ import { PasswordUtil } from "src/common/utils";
 import { UserCustomers } from "../auth/dto/auth-response.dto";
 import { RolesEnum } from "src/common/enums/enum";
 import { PaginationRequest } from "src/common/dto/pagination-request";
-import {
-  IPaginationOptions,
-  paginate,
-  Pagination,
-} from "nestjs-typeorm-paginate";
+import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
 
 @Injectable()
 export class UsersService {
@@ -32,7 +28,7 @@ export class UsersService {
     private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,
-  ) { }
+  ) {}
 
   async addUser(userRequestDto: CreateUserRequestDto): Promise<CustomResponse> {
     try {
@@ -134,10 +130,12 @@ export class UsersService {
   async getUsers(
     paginationRequest: PaginationRequest,
     customerId: string,
-  ): Promise<Pagination<Users>> {
+  ): Promise<Pagination<CustomerUsers, IPaginationMeta>> {
     try {
       const searchCondition = Like(`%${paginationRequest.searchTerm}%`);
-      const matchedUsers = await this.customerUsersRepo.findAndCount({
+      const skip = (paginationRequest.page - 1) * paginationRequest.take;
+
+      const data = await this.customerUsersRepo.findAndCount({
         where: {
           customer: { id: customerId },
           user: {
@@ -155,31 +153,37 @@ export class UsersService {
             mobile: true,
           },
         },
-        take: paginationRequest.limit,
-        skip: (paginationRequest.page - 1) * paginationRequest.limit,
+        take: paginationRequest.take,
+        skip: skip,
       });
-      return paginateResponse(matchedUsers, paginationRequest.page, paginationRequest.limit);
 
+      return paginateResponse(
+        data,
+        paginationRequest.page,
+        paginationRequest.take,
+      );
     } catch (error) {
       throw new Error(`Error fetching users: ${error.message}`);
     }
   }
-
 }
 
-function paginateResponse<T>(data:T, page:number, limit:number):Pagination<T> {
+function paginateResponse<T>(
+  data: [result: T[], total: number],
+  page: number,
+  take: number,
+): Pagination<T, IPaginationMeta> {
   const [result, total] = data;
-  const lastPage = Math.ceil(total / limit);
-  const nextPage = page + 1 > lastPage ? null : page + 1;
-  const prevPage = page - 1 < 1 ? null : page - 1;
+  const totalPages = Math.ceil(total / take);
+
   return {
-    statusCode: 'success',
-    items: [...result],
-    meta:{}
-    count: total,
-    currentPage: page,
-    nextPage: nextPage,
-    prevPage: prevPage,
-    lastPage: lastPage,
-  }
+    items: result,
+    meta: {
+      totalItems: total,
+      currentPage: page,
+      totalPages,
+      itemsPerPage: take,
+      itemCount: result.length,
+    },
+  };
 }
