@@ -166,6 +166,14 @@ export class Properties {
   @Column("smallint", { name: "DetachmentType", nullable: true })
   detachmentType: number | null;
 
+  @AutoMap()
+  @Column("character varying", {
+    name: "ImageUrl",
+    nullable: true,
+    length: 1000,
+  })
+  imageUrl: string | null;
+
   @OneToMany(() => Inspections, (inspections) => inspections.property)
   inspections: Inspections[];
 
