@@ -3,7 +3,7 @@ import { InjectMapper } from "@automapper/nestjs";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Customers, Users } from "src/entities";
-import { Like, Repository } from "typeorm";
+import { FindOptionsWhere, Like, Repository } from "typeorm";
 import { CreateUserRequestDto } from "./dto/user.request";
 import {
   CustomResponse,
@@ -29,7 +29,7 @@ export class UsersService {
     private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,
-  ) { }
+  ) {}
 
   async addUser(userRequestDto: CreateUserRequestDto): Promise<CustomResponse> {
     try {
@@ -132,17 +132,18 @@ export class UsersService {
     paginationRequest: PaginationRequest,
     customerId: string,
   ): Promise<Pagination<CustomerUsers, IPaginationMeta>> {
-    const { page, take, searchTerm } = paginationRequest
+    const { page, take, searchTerm } = paginationRequest;
 
     try {
-
-      const whereCondition: any = {
+      const whereConditions:
+        | FindOptionsWhere<CustomerUsers>
+        | FindOptionsWhere<CustomerUsers>[] = {
         customer: { id: customerId },
       };
 
-      if (searchTerm) {
+      if (searchTerm.trim()) {
         const searchCondition = Like(`%${searchTerm}%`);
-        whereCondition.user = [
+        whereConditions.user = [
           { email: searchCondition },
           { name: searchCondition },
           { mobile: searchCondition },
@@ -152,10 +153,8 @@ export class UsersService {
       const skip = (page - 1) * take;
 
       const data = await this.customerUsersRepo.findAndCount({
-        where: whereCondition,
-        relations: [
-          'user'
-        ],
+        where: whereConditions,
+        relations: ["user"],
         select: {
           user: {
             id: true,
@@ -168,14 +167,9 @@ export class UsersService {
         skip: skip,
       });
 
-      return paginateResponse(
-        data,
-        page,
-        take,
-      );
+      return paginateResponse(data, page, take);
     } catch (error) {
       throw new Error(`Error fetching users: ${error.message}`);
     }
   }
 }
-
