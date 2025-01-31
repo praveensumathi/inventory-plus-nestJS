@@ -14,7 +14,8 @@
         "options": {
           "dtoFileNameSuffix": [
             ".request.ts",
-            ".response.ts"
+            ".response.ts",
+            ".dto.ts"
           ]
         }
       }
