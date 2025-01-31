@@ -19,8 +19,12 @@ export class Properties {
   id: string;
 
   @AutoMap()
-  @Column("character varying", { name: "Ref", nullable: true, length: 50 })
-  ref: string | null;
+  @Column("character varying", {
+    name: "ReferenceNo",
+    nullable: true,
+    length: 50,
+  })
+  referenceNo: string | null;
 
   @AutoMap()
   @Column("character varying", {
@@ -67,48 +71,24 @@ export class Properties {
   longitude: string | null;
 
   @AutoMap()
-  @Column("character varying", {
-    name: "FurnishedType",
-    nullable: true,
-    length: 100,
-  })
-  furnishedType: string | null;
+  @Column("smallint", { name: "NoOfBeds", default: () => "0" })
+  noOfBeds: number;
 
   @AutoMap()
-  @Column("character varying", {
-    name: "PropertyType",
-    nullable: true,
-    length: 200,
-  })
-  propertyType: string | null;
+  @Column("smallint", { name: "NoOfBaths", default: () => "0" })
+  noOfBaths: number;
 
   @AutoMap()
-  @Column("character varying", {
-    name: "DetachmentType",
-    nullable: true,
-    length: 50,
-  })
-  detachmentType: string | null;
+  @Column("smallint", { name: "NoOfGarages", default: () => "0" })
+  noOfGarages: number;
 
   @AutoMap()
-  @Column("smallint", { name: "NoOfBeds", nullable: true })
-  noOfBeds: number | null;
+  @Column("boolean", { name: "HasParking", default: () => "false" })
+  hasParking: boolean;
 
   @AutoMap()
-  @Column("smallint", { name: "NoOfBaths", nullable: true })
-  noOfBaths: number | null;
-
-  @AutoMap()
-  @Column("smallint", { name: "NoOfGarages", nullable: true })
-  noOfGarages: number | null;
-
-  @AutoMap()
-  @Column("boolean", { name: "HasParking", nullable: true })
-  hasParking: boolean | null;
-
-  @AutoMap()
-  @Column("boolean", { name: "HasGarden", nullable: true })
-  hasGarden: boolean | null;
+  @Column("boolean", { name: "HasGarden", default: () => "false" })
+  hasGarden: boolean;
 
   @AutoMap()
   @Column("character varying", { name: "UPRN", nullable: true, length: 100 })
@@ -121,10 +101,6 @@ export class Properties {
   @AutoMap()
   @Column("character varying", { name: "notes", nullable: true, length: 500 })
   notes: string | null;
-
-  @AutoMap()
-  @Column("text", { name: "tags", nullable: true })
-  tags: string | null;
 
   @AutoMap()
   @Column("character varying", {
@@ -161,6 +137,34 @@ export class Properties {
   @AutoMap()
   @Column("boolean", { name: "IsActive", default: () => "false" })
   isActive: boolean;
+
+  @AutoMap()
+  @Column("boolean", {
+    name: "TransferPastInspection",
+    nullable: true,
+    default: () => "false",
+  })
+  transferPastInspection: boolean | null;
+
+  @AutoMap()
+  @Column("smallint", { name: "AdditionalAreas", default: () => "0" })
+  additionalAreas: number;
+
+  @AutoMap()
+  @Column("boolean", { name: "HasGarage", default: () => "false" })
+  hasGarage: boolean;
+
+  @AutoMap()
+  @Column("smallint", { name: "FurnishType", nullable: true })
+  furnishType: number | null;
+
+  @AutoMap()
+  @Column("smallint", { name: "PropertyType", nullable: true })
+  propertyType: number | null;
+
+  @AutoMap()
+  @Column("smallint", { name: "DetachmentType", nullable: true })
+  detachmentType: number | null;
 
   @OneToMany(() => Inspections, (inspections) => inspections.property)
   inspections: Inspections[];

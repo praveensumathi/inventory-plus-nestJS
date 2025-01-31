@@ -20,20 +20,16 @@ export class Inspections {
   id: string;
 
   @AutoMap()
-  @Column("character varying", {
-    name: "InspectionName",
-    nullable: true,
-    length: 100,
-  })
-  inspectionName: string | null;
+  @Column("character varying", { name: "Name", nullable: true, length: 100 })
+  name: string | null;
 
   @AutoMap()
   @Column("smallint", { name: "Template", nullable: true })
   template: number | null;
 
   @AutoMap()
-  @Column("smallint", { name: "InspectionType", nullable: true })
-  inspectionType: number | null;
+  @Column("smallint", { name: "Type", nullable: true })
+  type: number | null;
 
   @AutoMap()
   @Column("smallint", { name: "LocationOfKeys", nullable: true })
@@ -41,23 +37,15 @@ export class Inspections {
 
   @AutoMap()
   @Column("character", {
-    name: "KeyReturnINstruction",
+    name: "KeyReturnInstruction",
     nullable: true,
-    length: 10,
+    length: 100,
   })
-  keyReturnINstruction: string | null;
+  keyReturnInstruction: string | null;
 
   @AutoMap()
   @Column("character varying", { name: "Notes", nullable: true, length: 500 })
   notes: string | null;
-
-  @AutoMap()
-  @Column("character varying", {
-    name: "State",
-    length: 50,
-    default: () => "'100'",
-  })
-  state: string;
 
   @AutoMap()
   @Column("bigint", { name: "CreatedBy", nullable: true })
@@ -82,6 +70,10 @@ export class Inspections {
     default: () => "CURRENT_TIMESTAMP",
   })
   modifiedDate: Date | null;
+
+  @AutoMap()
+  @Column("smallint", { name: "InspectionState", default: () => "1" })
+  inspectionState: number;
 
   @OneToMany(
     () => InspectionContacts,
