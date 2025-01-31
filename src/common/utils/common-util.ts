@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 /**
  * Checks if the provided value is not null, undefined, or empty.
  *
@@ -54,4 +56,8 @@ export function getPropertyName<T extends object>(
   const res = {} as { [Property in keyof T]: string };
   Object.keys(o).map((k) => (res[k as keyof T] = k));
   return expression(res);
+}
+
+export function getLoggedInUserId(req: Request): string {
+  return req.user["sub"];
 }

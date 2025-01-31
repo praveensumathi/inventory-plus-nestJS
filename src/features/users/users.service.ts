@@ -3,13 +3,13 @@ import { InjectMapper } from "@automapper/nestjs";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Customers, Users } from "src/entities";
-import { FindOptionsWhere, Like, Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { CreateUserRequestDto } from "./dto/user.request";
 import {
   CustomResponse,
   ResponseFactory,
 } from "src/common/dto/common-response";
-import { getPropertyName, isNotEmpty } from "src/common/utils/common-util";
+import { isNotEmpty } from "src/common/utils/common-util";
 import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
 import { UserCustomers } from "../auth/dto/auth-response.dto";
@@ -17,6 +17,7 @@ import { RolesEnum } from "src/common/enums/enum";
 import { PaginationRequest } from "src/common/dto/pagination-request";
 import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
 import { paginateResponse } from "src/common/utils/pagination-util";
+import { WhereCondition } from "src/common/types";
 
 @Injectable()
 export class UsersService {
@@ -24,8 +25,6 @@ export class UsersService {
     @InjectRepository(Users)
     private readonly userRepo: Repository<Users>,
     @InjectRepository(Customers)
-    private readonly customerRepo: Repository<Customers>,
-    @InjectRepository(CustomerUsers)
     private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,
@@ -132,12 +131,12 @@ export class UsersService {
     paginationRequest: PaginationRequest,
     customerId: string,
   ): Promise<Pagination<CustomerUsers, IPaginationMeta>> {
-    const { page, take, searchTerm } = paginationRequest;
-
     try {
-      const whereConditions:
-        | FindOptionsWhere<CustomerUsers>
-        | FindOptionsWhere<CustomerUsers>[] = {
+      const { page, take, searchTerm } = paginationRequest;
+
+      const skip = (page - 1) * take;
+
+      const whereConditions: WhereCondition<CustomerUsers> = {
         customer: { id: customerId },
       };
 
@@ -149,8 +148,6 @@ export class UsersService {
           { mobile: searchCondition },
         ];
       }
-
-      const skip = (page - 1) * take;
 
       const data = await this.customerUsersRepo.findAndCount({
         where: whereConditions,
