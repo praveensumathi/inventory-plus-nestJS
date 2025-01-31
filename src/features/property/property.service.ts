@@ -43,8 +43,4 @@ export class PropertyService {
             return ResponseFactory.error(error.message);
         }
     }
-
-
-
-
 }
