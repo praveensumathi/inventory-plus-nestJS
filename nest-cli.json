@@ -7,6 +7,17 @@
     "assets": [
       "**/templates/**/*"
     ],
-    "watchAssets": true
+    "watchAssets": true,
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "dtoFileNameSuffix": [
+            ".request.ts",
+            ".response.ts"
+          ]
+        }
+      }
+    ]
   }
 }

@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/auth-request.dto";
-import { CustomResponse } from "src/common/dto/common-response";
+import { CustomResponse } from "src/common/dto/common.response";
 import {
   ApiBearerAuth,
   ApiExtraModels,

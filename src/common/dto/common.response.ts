@@ -1,16 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
 
 export class BaseResponse {
-  @ApiProperty()
   success: boolean;
-  @ApiProperty()
   statusCode: number;
-  @ApiProperty()
   message: string;
 }
 
 export class CustomResponse<T = unknown> extends BaseResponse {
-  @ApiProperty()
   data: T | null;
 
   constructor(data: T | null, success: boolean, code: number, message: string) {
@@ -38,4 +35,41 @@ export class ResponseFactory {
   ) {
     return new CustomResponse(data, false, code, message);
   }
+}
+
+export class PaginationMeta {
+  /**
+   * the amount of items on this specific page
+   */
+  @ApiProperty()
+  itemCount: number;
+  /**
+   * the total amount of items
+   */
+  @ApiProperty()
+  totalItems?: number;
+  /**
+   * the amount of items that were requested per page
+   */
+  @ApiProperty()
+  itemsPerPage: number;
+
+  /**
+   * the total amount of pages in this paginator
+   */
+  @ApiProperty()
+  totalPages?: number;
+  /**
+   * the current page this paginator "points" to
+   */
+  @ApiProperty()
+  currentPage: number;
+}
+
+export class PaginationResponseDto<T> {
+  @ApiProperty({ isArray: true, default: [] })
+  items: T[];
+
+  @ApiProperty({ type: () => PaginationMeta })
+  meta: PaginationMeta;
 }

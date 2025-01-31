@@ -5,7 +5,7 @@ import { signInResponseDto, LoggedInUserDto } from "./dto/auth-response.dto";
 import {
   CustomResponse,
   ResponseFactory,
-} from "src/common/dto/common-response";
+} from "src/common/dto/common.response";
 import { isNotEmpty, PasswordUtil } from "src/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Users } from "src/entities";

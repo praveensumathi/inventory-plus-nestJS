@@ -1,4 +1,15 @@
-import { getLoggedInUserId, getPropertyName, isNotEmpty } from "./common-util";
+import {
+  getLoggedInUserId,
+  getPropertyName,
+  isNotEmpty,
+  transformDataToDto,
+} from "./common-util";
 import { PasswordUtil } from "./password-util";
 
-export { isNotEmpty, PasswordUtil, getPropertyName ,getLoggedInUserId};
+export {
+  isNotEmpty,
+  PasswordUtil,
+  getPropertyName,
+  getLoggedInUserId,
+  transformDataToDto,
+};

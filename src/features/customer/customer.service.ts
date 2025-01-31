@@ -9,7 +9,7 @@ import { CustomerInfoDto } from "./dto/customer-response";
 import {
   CustomResponse,
   ResponseFactory,
-} from "src/common/dto/common-response";
+} from "src/common/dto/common.response";
 
 @Injectable()
 export class CustomerService {

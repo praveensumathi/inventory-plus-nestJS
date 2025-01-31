@@ -1,11 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class PaginationRequest {
-  @ApiProperty()
+  @ApiProperty({ default: 1 })
   page: number;
-  @ApiProperty()
+  @ApiProperty({ default: 10 })
   take: number;
-  @ApiProperty()
+  @ApiProperty({ default: "" })
   searchTerm?: string;
 
   constructor(page: number = 1, take: number = 10, searchTerm?: string) {

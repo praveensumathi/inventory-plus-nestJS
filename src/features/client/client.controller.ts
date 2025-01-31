@@ -7,7 +7,7 @@ import { ApiBearerAuth } from "@nestjs/swagger";
 import { Request } from "express";
 import { ClientDto } from "./dto/create-client.dto";
 import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
-import { PaginationRequest } from "src/common/dto/pagination-request";
+import { PaginationRequest } from "src/common/dto/pagination.request";
 
 @ApiBearerAuth()
 @Controller("client")

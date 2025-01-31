@@ -1,79 +1,45 @@
 import { AutoMap } from "@automapper/classes";
-import { ApiProperty } from "@nestjs/swagger";
-import { PartialType } from "@nestjs/swagger";
-import { PaginationRequest } from "src/common/dto/pagination-request";
+import { PaginationRequest } from "src/common/dto/pagination.request";
 
 export class BaseUserRequestDto {
   @AutoMap()
-  @ApiProperty()
   roleId: number;
-
   @AutoMap()
-  @ApiProperty()
-  title: string | null;
-
+  title: string;
   @AutoMap()
-  @ApiProperty()
-  name: string | null;
-
+  name: string;
   @AutoMap()
-  @ApiProperty()
-  email: string | null;
-
+  email: string;
   @AutoMap()
-  @ApiProperty()
-  telephone: string | null;
-
+  telephone?: string;
   @AutoMap()
-  @ApiProperty()
-  mobile: string | null;
-
+  mobile: string;
   @AutoMap()
-  @ApiProperty()
-  note: string | null;
-
+  note?: string;
   @AutoMap()
-  @ApiProperty()
-  emailNotification: boolean | null;
-
+  emailNotification: boolean;
   @AutoMap()
-  @ApiProperty()
-  createInspection: boolean | null;
-
-  @ApiProperty({ required: true })
+  createInspection: boolean;
   customerId: string;
-
   @AutoMap()
-  @ApiProperty()
-  addressLine1: string | null;
-
+  addressLine1: string;
   @AutoMap()
-  @ApiProperty()
-  addressLine2: string | null;
-
+  addressLine2: string;
   @AutoMap()
-  @ApiProperty()
-  city: string | null;
-
+  city: string;
   @AutoMap()
-  @ApiProperty()
-  county: string | null;
-
+  county: string;
   @AutoMap()
-  @ApiProperty()
-  postCode: string | null;
-
+  postCode: string;
   @AutoMap()
-  @ApiProperty()
-  country: string | null;
+  country: string;
 }
 
-export class CreateUserRequestDto extends BaseUserRequestDto { }
+export class CreateUserRequestDto extends BaseUserRequestDto {}
 
 export class UpdateUserRequestDto extends BaseUserRequestDto {
   @AutoMap()
-  @ApiProperty({ required: true })
   id: string;
 }
 
-export class GetUserRequestDto extends PaginationRequest { }
+export class GetUserRequestDto extends PaginationRequest {}

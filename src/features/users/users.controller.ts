@@ -1,16 +1,25 @@
 import { Body, Controller, Post, Query, Req } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiResponse,
+} from "@nestjs/swagger";
 import { CreateUserRequestDto, GetUserRequestDto } from "./dto/user.request";
-import { CustomResponse } from "src/common/dto/common-response";
 import { Cookies, Public } from "src/decorator";
-import { PaginationRequest } from "src/common/dto/pagination-request";
 import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
+import { UserListDtoResponse } from "./dto/user.response";
+import {
+  CustomResponse,
+  PaginationResponseDto,
+} from "src/common/dto/common.response";
 
 @ApiBearerAuth()
 @Controller("users")
+@ApiExtraModels(CustomResponse, PaginationResponseDto, UserListDtoResponse)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Public()
   @Post("createUser")

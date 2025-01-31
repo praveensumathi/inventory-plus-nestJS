@@ -7,17 +7,18 @@ import { Like, Repository } from "typeorm";
 import { CreateUserRequestDto } from "./dto/user.request";
 import {
   CustomResponse,
+  PaginationResponseDto,
   ResponseFactory,
-} from "src/common/dto/common-response";
-import { isNotEmpty } from "src/common/utils/common-util";
+} from "src/common/dto/common.response";
+import { isNotEmpty, transformDataToDto } from "src/common/utils/common-util";
 import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
 import { UserCustomers } from "../auth/dto/auth-response.dto";
 import { RolesEnum } from "src/common/enums/enum";
-import { PaginationRequest } from "src/common/dto/pagination-request";
-import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
+import { PaginationRequest } from "src/common/dto/pagination.request";
 import { paginateResponse } from "src/common/utils/pagination-util";
 import { WhereCondition } from "src/common/types";
+import { UserListDtoResponse } from "./dto/user.response";
 
 @Injectable()
 export class UsersService {
@@ -130,7 +131,7 @@ export class UsersService {
   async getUsers(
     paginationRequest: PaginationRequest,
     customerId: string,
-  ): Promise<Pagination<CustomerUsers, IPaginationMeta>> {
+  ): Promise<CustomResponse<PaginationResponseDto<UserListDtoResponse>>> {
     try {
       const { page, take, searchTerm } = paginationRequest;
 
@@ -164,7 +165,13 @@ export class UsersService {
         skip: skip,
       });
 
-      return paginateResponse(data, page, take);
+      const dtoResponse = transformDataToDto<
+        CustomerUsers,
+        UserListDtoResponse
+      >(data);
+
+      var paginationResposne = paginateResponse(dtoResponse, page, take);
+      return ResponseFactory.success(paginationResposne);
     } catch (error) {
       throw new Error(`Error fetching users: ${error.message}`);
     }

@@ -9,10 +9,10 @@ import { Request } from "express";
 import {
   CustomResponse,
   ResponseFactory,
-} from "src/common/dto/common-response";
+} from "src/common/dto/common.response";
 import { CREATE_ID } from "src/common/constants/constants";
 import { Pagination } from "nestjs-typeorm-paginate";
-import { PaginationRequest } from "src/common/dto/pagination-request";
+import { PaginationRequest } from "src/common/dto/pagination.request";
 import { paginateResponse } from "src/common/utils/pagination-util";
 import { WhereCondition } from "src/common/types";
 import { getLoggedInUserId } from "src/common/utils";

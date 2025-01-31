@@ -61,3 +61,10 @@ export function getPropertyName<T extends object>(
 export function getLoggedInUserId(req: Request): string {
   return req.user["sub"];
 }
+
+export function transformDataToDto<S extends D, D>(
+  data: [S[], number],
+): [D[], number] {
+  const [result, total] = data;
+  return [result.map((item) => ({ ...item }) as D), total];
+}
