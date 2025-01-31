@@ -11,7 +11,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   const config = new DocumentBuilder()
-    .setTitle("Inventory Plus")
+    .setTitle("PropertyPulse")
     .addBearerAuth()
     .build();
 

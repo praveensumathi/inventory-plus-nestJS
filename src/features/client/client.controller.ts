@@ -14,8 +14,8 @@ import { PaginationRequest } from "src/common/dto/pagination-request";
 export class ClientController {
   constructor(
     private readonly clientService: ClientService,
-    private readonly emailService: EmailService,
-  ) { }
+    // private readonly emailService: EmailService,
+  ) {}
 
   @Post("save")
   create(
@@ -31,18 +31,18 @@ export class ClientController {
     return this.clientService.getClients(query);
   }
 
-  @Public()
-  @Post("email")
-  async sendEmail(): Promise<boolean> {
-    const transformedDto: SendSingleEmailModel = {
-      toMail: "praveen.r@deventure.co",
-      mailSubject: "New client registration",
-      template: "welcome",
-      data: {
-        name: "Praveen",
-      },
-    };
+  // @Public()
+  // @Post("email")
+  // async sendEmail(): Promise<boolean> {
+  //   const transformedDto: SendSingleEmailModel = {
+  //     toMail: "praveen.r@deventure.co",
+  //     mailSubject: "New client registration",
+  //     template: "welcome",
+  //     data: {
+  //       name: "Praveen",
+  //     },
+  //   };
 
-    return this.emailService.sendEmail(transformedDto);
-  }
+  //   return this.emailService.sendEmail(transformedDto);
+  // }
 }

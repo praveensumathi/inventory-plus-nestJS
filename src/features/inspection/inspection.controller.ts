@@ -7,9 +7,4 @@ import { ApiBearerAuth } from "@nestjs/swagger";
 @Controller("inspection")
 export class InspectionController {
   constructor(private readonly inspectionService: InspectionService) {}
-
-  @Get("profile")
-  getAllInspection(@Request() req) {
-    return req.user;
-  }
 }

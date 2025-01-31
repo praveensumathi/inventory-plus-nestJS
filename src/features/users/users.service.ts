@@ -2,7 +2,7 @@ import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Customers, Users } from "src/entities";
+import { Users } from "src/entities";
 import { Like, Repository } from "typeorm";
 import { CreateUserRequestDto } from "./dto/user.request";
 import {
@@ -24,7 +24,7 @@ export class UsersService {
   constructor(
     @InjectRepository(Users)
     private readonly userRepo: Repository<Users>,
-    @InjectRepository(Customers)
+    @InjectRepository(CustomerUsers)
     private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,

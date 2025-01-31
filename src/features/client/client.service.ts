@@ -72,18 +72,13 @@ export class ClientService {
           { name: searchCondition },
           { telephone: searchCondition },
           { company: searchCondition },
-          { addressLine1: searchCondition },
-          { addressLine2: searchCondition },
-          { city: searchCondition },
-          { county: searchCondition },
-          { postCode: searchCondition },
-          { country: searchCondition },
         ];
       }
 
       const data = await this.clientsRepo.findAndCount({
         where: whereConditions,
         select: {
+          id: true,
           email: true,
           name: true,
           telephone: true,

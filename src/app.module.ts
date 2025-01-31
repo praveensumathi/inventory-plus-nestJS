@@ -41,7 +41,7 @@ import { EmailModule } from "./services/mail/email.module";
     CustomerModule,
     UsersModule,
     ClientModule,
-    EmailModule
+    //EmailModule
   ],
   controllers: [AppController],
   providers: [
@@ -56,5 +56,4 @@ import { EmailModule } from "./services/mail/email.module";
     },
   ],
 })
-
-export class AppModule { }
+export class AppModule {}
