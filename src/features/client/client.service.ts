@@ -64,11 +64,21 @@ export class ClientService {
     try {
       const { page, take, searchTerm } = paginationRequest;
       const skip = (page - 1) * take;
+      console.log("skip", skip);
+      console.log("take", take);
+
       const data = await this.clientsRepo.findAndCount({
         select: {
           email: true,
           name: true,
           telephone: true,
+          company: true,
+          addressLine1: true,
+          addressLine2: true,
+          city: true,
+          county: true,
+          postCode: true,
+          country: true,
         },
         take: take,
         skip: skip,
@@ -83,6 +93,13 @@ export class ClientService {
           { email: searchCondition },
           { name: searchCondition },
           { telephone: searchCondition },
+          { company: searchCondition },
+          { addressLine1: searchCondition },
+          { addressLine2: searchCondition },
+          { city: searchCondition },
+          { county: searchCondition },
+          { postCode: searchCondition },
+          { country: searchCondition },
         ];
       }
       return paginateResponse(data, page, take);
