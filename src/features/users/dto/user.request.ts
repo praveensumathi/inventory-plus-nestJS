@@ -68,9 +68,9 @@ export class BaseUserRequestDto {
   country: string | null;
 }
 
-export class CreateUserRequestDto extends PartialType(BaseUserRequestDto) { }
+export class CreateUserRequestDto extends BaseUserRequestDto { }
 
-export class UpdateUserRequestDto extends PartialType(BaseUserRequestDto) {
+export class UpdateUserRequestDto extends BaseUserRequestDto {
   @AutoMap()
   @ApiProperty({ required: true })
   id: string;
