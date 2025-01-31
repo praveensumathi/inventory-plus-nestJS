@@ -17,6 +17,7 @@ import { RolesEnum } from "src/common/enums/enum";
 import { PaginationRequest } from "src/common/dto/pagination-request";
 import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
 import { paginateResponse } from "src/common/utils/pagination-util";
+import { WhereCondition } from "src/common/types";
 
 @Injectable()
 export class UsersService {
@@ -132,12 +133,12 @@ export class UsersService {
     paginationRequest: PaginationRequest,
     customerId: string,
   ): Promise<Pagination<CustomerUsers, IPaginationMeta>> {
-    const { page, take, searchTerm } = paginationRequest;
-
     try {
-      const whereConditions:
-        | FindOptionsWhere<CustomerUsers>
-        | FindOptionsWhere<CustomerUsers>[] = {
+      const { page, take, searchTerm } = paginationRequest;
+
+      const skip = (page - 1) * take;
+
+      const whereConditions: WhereCondition<CustomerUsers> = {
         customer: { id: customerId },
       };
 
@@ -149,8 +150,6 @@ export class UsersService {
           { mobile: searchCondition },
         ];
       }
-
-      const skip = (page - 1) * take;
 
       const data = await this.customerUsersRepo.findAndCount({
         where: whereConditions,
