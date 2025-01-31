@@ -3,13 +3,13 @@ import { InjectMapper } from "@automapper/nestjs";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Customers, Users } from "src/entities";
-import { FindOptionsWhere, Like, Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { CreateUserRequestDto } from "./dto/user.request";
 import {
   CustomResponse,
   ResponseFactory,
 } from "src/common/dto/common-response";
-import { getPropertyName, isNotEmpty } from "src/common/utils/common-util";
+import { isNotEmpty } from "src/common/utils/common-util";
 import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
 import { UserCustomers } from "../auth/dto/auth-response.dto";
@@ -25,8 +25,6 @@ export class UsersService {
     @InjectRepository(Users)
     private readonly userRepo: Repository<Users>,
     @InjectRepository(Customers)
-    private readonly customerRepo: Repository<Customers>,
-    @InjectRepository(CustomerUsers)
     private readonly customerUsersRepo: Repository<CustomerUsers>,
     @InjectMapper()
     private readonly mapper: Mapper,
