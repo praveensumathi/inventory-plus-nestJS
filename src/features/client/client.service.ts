@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Clients } from "src/entities";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Like, Repository } from "typeorm";
 import { ClientDto } from "./dto/create-client.dto";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
@@ -17,6 +17,7 @@ import {
   IPaginationOptions,
 } from "nestjs-typeorm-paginate";
 import { PaginationRequest } from "src/common/dto/pagination-request";
+import { paginateResponse } from "src/common/utils/pagination-util";
 
 @Injectable()
 export class ClientService {
@@ -61,25 +62,31 @@ export class ClientService {
     paginationRequest: PaginationRequest,
   ): Promise<Pagination<Clients>> {
     try {
-      const queryBuilder = this.clientsRepo
-        .createQueryBuilder("clients")
-        .select(["clients.name", "clients.email", "clients.telephone"]);
+      const { page, take, searchTerm } = paginationRequest;
+      const skip = (page - 1) * take;
+      const data = await this.clientsRepo.findAndCount({
+        select: {
+          email: true,
+          name: true,
+          telephone: true,
+        },
+        take: take,
+        skip: skip,
+      })
+      let whereConditions:
+        | FindOptionsWhere<Clients>
+        | FindOptionsWhere<Clients>[] = {};
 
-      if (paginationRequest.searchTerm) {
-        queryBuilder.where(
-          "clients.name ILIKE :searchTerm OR clients.email ILIKE :searchTerm",
-          {
-            searchTerm: `%${paginationRequest.searchTerm}%`,
-          },
-        );
+      if (searchTerm.trim()) {
+        const searchCondition = Like(`%${searchTerm}%`);
+        whereConditions = [
+          { email: searchCondition },
+          { name: searchCondition },
+          { telephone: searchCondition },
+        ];
       }
-      const options: IPaginationOptions = {
-        page: paginationRequest.page,
-        limit: paginationRequest.take,
-      };
+      return paginateResponse(data, page, take);
 
-      const response = await paginate(queryBuilder, options);
-      return { items: response.items, meta: response.meta };
     } catch (error) {
       throw new Error(`Error fetching clients: ${error.message}`);
     }

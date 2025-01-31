@@ -1,5 +1,5 @@
 import { AutoMap } from "@automapper/classes";
-import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class ClientDto {
   @AutoMap()
