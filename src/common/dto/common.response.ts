@@ -8,6 +8,7 @@ export class BaseResponse {
 }
 
 export class CustomResponse<T = unknown> extends BaseResponse {
+  @ApiProperty({ isArray: true, default: [], type: Object })
   data: T | null;
 
   constructor(data: T | null, success: boolean, code: number, message: string) {
@@ -67,7 +68,7 @@ export class PaginationMeta {
 }
 
 export class PaginationResponseDto<T> {
-  @ApiProperty({ isArray: true, default: [] })
+  @ApiProperty({ isArray: true, default: [], type: [Object] })
   items: T[];
 
   @ApiProperty({ type: () => PaginationMeta })

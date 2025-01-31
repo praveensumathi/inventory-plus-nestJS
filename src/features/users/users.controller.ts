@@ -17,13 +17,11 @@ import {
 
 @ApiBearerAuth()
 @Controller("users")
-@ApiExtraModels(CustomResponse, PaginationResponseDto, UserListDtoResponse)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Public()
   @Post("createUser")
-  @ApiResponse({ type: CustomResponse })
   async addUser(
     @Body() createUserRequestDto: CreateUserRequestDto,
   ): Promise<CustomResponse> {
