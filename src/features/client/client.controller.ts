@@ -8,6 +8,11 @@ import { Request } from "express";
 import { ClientDto } from "./dto/create-client.dto";
 import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
 import { PaginationRequest } from "src/common/dto/pagination.request";
+import { ApiOkResponsePaginated } from "src/decorator/pagination.decorator";
+import {
+  ClientListDtoResponse,
+  ClientPaginationResponse,
+} from "./dto/client.response";
 
 @ApiBearerAuth()
 @Controller("client")
@@ -27,6 +32,7 @@ export class ClientController {
   }
 
   @Post("get")
+  @ApiOkResponsePaginated(ClientListDtoResponse, ClientPaginationResponse)
   getClients(@Req() req: Request, @Body() query: PaginationRequest) {
     return this.clientService.getClients(query);
   }

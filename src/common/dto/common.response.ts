@@ -1,5 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IPaginationMeta, Pagination } from "nestjs-typeorm-paginate";
+import { UserListDtoResponse } from "src/features/users/dto/user.response";
+
+export type ClassType<T = any> = new (...args: any[]) => T;
 
 export class BaseResponse {
   success: boolean;
@@ -68,7 +71,7 @@ export class PaginationMeta {
 }
 
 export class PaginationResponseDto<T> {
-  @ApiProperty({ isArray: true, default: [], type: [Object] })
+  @ApiProperty({ type: () => [Object] })
   items: T[];
 
   @ApiProperty({ type: () => PaginationMeta })

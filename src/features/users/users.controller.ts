@@ -1,19 +1,15 @@
-import { Body, Controller, Post, Query, Req } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import {
-  ApiBearerAuth,
-  ApiExtraModels,
-  ApiOkResponse,
-  ApiResponse,
-} from "@nestjs/swagger";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import { CreateUserRequestDto, GetUserRequestDto } from "./dto/user.request";
 import { Cookies, Public } from "src/decorator";
 import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
-import { UserListDtoResponse } from "./dto/user.response";
 import {
-  CustomResponse,
-  PaginationResponseDto,
-} from "src/common/dto/common.response";
+  UserListDtoResponse,
+  UserPaginationResponse,
+} from "./dto/user.response";
+import { CustomResponse } from "src/common/dto/common.response";
+import { ApiOkResponsePaginated } from "src/decorator/pagination.decorator";
 
 @ApiBearerAuth()
 @Controller("users")
@@ -30,6 +26,7 @@ export class UsersController {
   }
 
   @Post("get")
+  @ApiOkResponsePaginated(UserListDtoResponse, UserPaginationResponse)
   getUsers(
     @Body() query: GetUserRequestDto,
     @Cookies(COOKIE_CUSTOMER_ID) customerId: string,

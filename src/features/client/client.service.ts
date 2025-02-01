@@ -11,11 +11,11 @@ import {
   ResponseFactory,
 } from "src/common/dto/common.response";
 import { CREATE_ID } from "src/common/constants/constants";
-import { Pagination } from "nestjs-typeorm-paginate";
 import { PaginationRequest } from "src/common/dto/pagination.request";
 import { paginateResponse } from "src/common/utils/pagination-util";
 import { WhereCondition } from "src/common/types";
 import { getLoggedInUserId } from "src/common/utils";
+import { ClientPaginationResponse } from "./dto/client.response";
 
 @Injectable()
 export class ClientService {
@@ -58,7 +58,7 @@ export class ClientService {
 
   async getClients(
     paginationRequest: PaginationRequest,
-  ): Promise<Pagination<Clients>> {
+  ): Promise<ClientPaginationResponse> {
     try {
       const { page, take, searchTerm } = paginationRequest;
       const skip = (page - 1) * take;
@@ -94,9 +94,10 @@ export class ClientService {
         skip: skip,
       });
 
-      return paginateResponse(data, page, take);
+      var paginationResponse = paginateResponse(data, page, take);
+      return ResponseFactory.success(paginationResponse);
     } catch (error) {
-      throw new Error(`Error fetching clients: ${error.message}`);
+      throw ResponseFactory.error(`Error fetching clients: ${error.message}`);
     }
   }
 }
