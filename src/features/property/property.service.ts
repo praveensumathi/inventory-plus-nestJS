@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Properties } from 'src/entities';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { PropertyDto } from './dto/property.dto';
 import { CustomResponse, ResponseFactory } from 'src/common/dto/common.response';
-import { CREATE_ID } from 'src/common/constants/constants';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { getLoggedInUserId } from 'src/common/utils';
 import { Request } from "express";
+import { paginateResponse } from 'src/common/utils/pagination-util';
+import { WhereCondition } from 'src/common/types';
+import { PaginationRequest } from 'src/common/dto/pagination.request';
 
 @Injectable()
 export class PropertyService {
@@ -21,7 +23,7 @@ export class PropertyService {
 
     async save(propertyDto: PropertyDto, req: Request): Promise<CustomResponse> {
         try {
-            console.log("propertyDto", propertyDto); 
+            console.log("propertyDto", propertyDto);
             let propertyEntity = await this.propertiesRepo.findOne({
                 where: { id: propertyDto.id },
             });
@@ -33,7 +35,10 @@ export class PropertyService {
                 propertyEntity.modifiedBy = getLoggedInUserId(req);
             }
 
-            Object.assign(propertyEntity, propertyDto);
+            propertyEntity = Object.assign(propertyEntity, propertyDto);
+
+            console.log("propertyEntity", propertyEntity);
+
 
             propertyEntity = await this.propertiesRepo.save(propertyEntity);
 
@@ -42,5 +47,5 @@ export class PropertyService {
             console.error("Error saving property:", error);
             return ResponseFactory.error(error.message);
         }
-    }
+    }   
 }

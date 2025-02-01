@@ -1,7 +1,3 @@
-import { AutoMap } from "@automapper/classes";
-import { ApiProperty } from "@nestjs/swagger";
-import { Inspections } from "src/entities";
-
 export class PropertyDto {
     id?: string;
     referenceNo?: string;
@@ -34,6 +30,5 @@ export class PropertyDto {
     propertyType?: number;
     detachmentType?: number;
     imageUrl?: string;
-    inspections?: string;
     client?: string;
 }
