@@ -9,7 +9,7 @@ import {
   UserPaginationResponse,
 } from "./dto/user.response";
 import { CustomResponse } from "src/common/dto/common.response";
-import { ApiOkResponsePaginated } from "src/decorator/pagination.decorator";
+import { ApiOkPaginatedResponse } from "src/decorator/pagination.decorator";
 
 @ApiBearerAuth()
 @Controller("users")
@@ -26,7 +26,7 @@ export class UsersController {
   }
 
   @Post("get")
-  @ApiOkResponsePaginated(UserListDtoResponse, UserPaginationResponse)
+  @ApiOkPaginatedResponse(UserListDtoResponse, UserPaginationResponse)
   getUsers(
     @Body() query: GetUserRequestDto,
     @Cookies(COOKIE_CUSTOMER_ID) customerId: string,

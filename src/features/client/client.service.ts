@@ -39,14 +39,15 @@ export class ClientService {
       });
 
       clientEntity ??= new Clients();
-
+      var loggedInUserId = getLoggedInUserId(req);
+      
       if (clientDto.id == CREATE_ID) {
         clientEntity = this.mapper.map(clientDto, ClientDto, Clients);
-        clientEntity.createdBy = getLoggedInUserId(req);
+        clientEntity.createdBy = loggedInUserId;
         clientEntity.customer.id = customerId;
       } else {
         this.mapper.mutate(clientDto, clientEntity, ClientDto, Clients);
-        clientEntity.modifiedBy = getLoggedInUserId(req);
+        clientEntity.modifiedBy = loggedInUserId;
       }
       clientEntity = await this.clientsRepo.save(clientEntity);
 

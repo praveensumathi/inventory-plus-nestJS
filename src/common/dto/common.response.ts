@@ -11,7 +11,7 @@ export class BaseResponse {
 }
 
 export class CustomResponse<T = unknown> extends BaseResponse {
-  @ApiProperty({ isArray: true, default: [], type: Object })
+  @ApiProperty({ isArray: true, type: Object })
   data: T | null;
 
   constructor(data: T | null, success: boolean, code: number, message: string) {

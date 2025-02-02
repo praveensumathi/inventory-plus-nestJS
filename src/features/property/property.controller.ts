@@ -1,20 +1,24 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
-import { PropertyService } from './property.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { PropertyDto } from './dto/property.dto';
+import { Body, Controller, Post, Req } from "@nestjs/common";
+import { PropertyService } from "./property.service";
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiResponse,
+  getSchemaPath,
+} from "@nestjs/swagger";
+import { PropertyRequestDto } from "./dto/property.request";
 import { Request } from "express";
+import { CustomResponse } from "src/common/dto/common.response";
+import { ApiOkCustomResponse } from "src/decorator/pagination.decorator";
 
 @ApiBearerAuth()
-@Controller('property')
+@Controller("property")
 export class PropertyController {
-  constructor(private readonly propertyService: PropertyService) { }
-  
+  constructor(private readonly propertyService: PropertyService) {}
+
   @Post("save")
-  create(
-    @Req() req: Request,
-    @Body() createPropertyDto: PropertyDto,
-  ) {
+  @ApiOkCustomResponse(PropertyRequestDto, CustomResponse)
+  create(@Req() req: Request, @Body() createPropertyDto: PropertyRequestDto) {
     return this.propertyService.save(createPropertyDto, req);
   }
-  
 }
