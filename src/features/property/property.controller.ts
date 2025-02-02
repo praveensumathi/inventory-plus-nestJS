@@ -9,7 +9,7 @@ import {
 import { PropertyRequestDto } from "./dto/property.request";
 import { Request } from "express";
 import { CustomResponse } from "src/common/dto/common.response";
-import { ApiOkCustomResponse } from "src/decorator/pagination.decorator";
+import { ApiOkCustomResponse } from "src/decorator/response.decorator";
 
 @ApiBearerAuth()
 @Controller("property")

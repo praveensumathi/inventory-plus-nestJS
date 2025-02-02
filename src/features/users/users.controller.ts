@@ -9,7 +9,7 @@ import {
   UserPaginationResponse,
 } from "./dto/user.response";
 import { CustomResponse } from "src/common/dto/common.response";
-import { ApiOkPaginatedResponse } from "src/decorator/pagination.decorator";
+import { ApiOkPaginatedResponse } from "src/decorator/response.decorator";
 
 @ApiBearerAuth()
 @Controller("users")
