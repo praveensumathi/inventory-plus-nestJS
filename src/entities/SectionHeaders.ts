@@ -1,6 +1,14 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
 import { AutoMap } from "@automapper/classes";
 import { Sections } from "./Sections";
+import { SectionItemDetails } from "./SectionItemDetails";
 
 @Index("SectionHeaders_pkey", ["id"], { unique: true })
 @Entity("SectionHeaders", { schema: "public" })
@@ -8,10 +16,6 @@ export class SectionHeaders {
   @AutoMap()
   @Column("bigint", { primary: true, name: "Id" })
   id: string;
-
-  @AutoMap()
-  @Column("character varying", { name: "UUID", nullable: true, length: 100 })
-  uuid: string | null;
 
   @AutoMap()
   @Column("character varying", { name: "Name", nullable: true, length: 100 })
@@ -69,7 +73,17 @@ export class SectionHeaders {
   @Column("bigint", { name: "ModifiedBy", nullable: true })
   modifiedBy: string | null;
 
+  @AutoMap()
+  @Column("uuid", { name: "UUID", nullable: true })
+  uuid: string | null;
+
   @ManyToOne(() => Sections, (sections) => sections.sectionHeaders)
   @JoinColumn([{ name: "SectionId", referencedColumnName: "id" }])
   section: Sections;
+
+  @OneToMany(
+    () => SectionItemDetails,
+    (sectionItemDetails) => sectionItemDetails.sectionHeader
+  )
+  sectionItemDetails: SectionItemDetails[];
 }

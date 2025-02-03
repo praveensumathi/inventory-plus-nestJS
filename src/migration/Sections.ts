@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { AutoMap } from "@automapper/classes";
 import { SectionHeaders } from "./SectionHeaders";
+import { SectionItems } from "./SectionItems";
 import { Inspections } from "./Inspections";
 
 @Index("Sections_pkey", ["id"], { unique: true })
@@ -72,6 +73,9 @@ export class Sections {
 
   @OneToMany(() => SectionHeaders, (sectionHeaders) => sectionHeaders.section)
   sectionHeaders: SectionHeaders[];
+
+  @OneToMany(() => SectionItems, (sectionItems) => sectionItems.section)
+  sectionItems: SectionItems[];
 
   @ManyToOne(() => Inspections, (inspections) => inspections.sections)
   @JoinColumn([{ name: "InspectionId", referencedColumnName: "id" }])

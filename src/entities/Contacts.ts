@@ -69,7 +69,7 @@ export class Contacts {
 
   @OneToMany(
     () => InspectionContacts,
-    (inspectionContacts) => inspectionContacts.contact,
+    (inspectionContacts) => inspectionContacts.contact
   )
   inspectionContacts: InspectionContacts[];
 }
