@@ -1,4 +1,5 @@
 import { AutoMap } from "@automapper/classes";
+import { ApiProperty } from "@nestjs/swagger";
 import { PaginationRequest } from "src/common/dto/pagination.request";
 
 export class BaseUserRequestDto {
@@ -33,6 +34,9 @@ export class BaseUserRequestDto {
   postCode: string;
   @AutoMap()
   country: string;
+
+  @ApiProperty({ format: "binary" })
+  file: string;
 }
 
 export class CreateUserRequestDto extends BaseUserRequestDto {}
