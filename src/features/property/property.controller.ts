@@ -9,7 +9,9 @@ import {
 import { PropertyRequestDto } from "./dto/property.request";
 import { Request } from "express";
 import { CustomResponse } from "src/common/dto/common.response";
-import { ApiOkCustomResponse } from "src/decorator/response.decorator";
+import { ApiOkCustomResponse, ApiOkPaginatedResponse } from "src/decorator/response.decorator";
+import { PaginationRequest } from "src/common/dto/pagination.request";
+import { PropertyListDtoResponse, PropertyPaginationResponse } from "./dto/property.response";
 
 @ApiBearerAuth()
 @Controller("property")
@@ -20,5 +22,11 @@ export class PropertyController {
   @ApiOkCustomResponse(PropertyRequestDto, CustomResponse)
   save(@Req() req: Request, @Body() createPropertyDto: PropertyRequestDto) {
     return this.propertyService.save(createPropertyDto, req);
+  }
+
+  @Post("get")
+  @ApiOkPaginatedResponse(PropertyListDtoResponse, PropertyPaginationResponse)
+  getProperties(@Req() req: Request, @Body() query: PaginationRequest) {
+    return this.propertyService.getProperties(query);
   }
 }

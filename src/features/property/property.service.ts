@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Clients, Properties } from "src/entities";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { PropertyRequestDto } from "./dto/property.request";
 import {
   CustomResponse,
@@ -12,6 +12,10 @@ import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
 import { getLoggedInUserId } from "src/common/utils";
 import { Request } from "express";
+import { PaginationRequest } from "src/common/dto/pagination.request";
+import { PropertyPaginationResponse } from "./dto/property.response";
+import { WhereCondition } from "src/common/types";
+import { paginateResponse } from "src/common/utils/pagination-util";
 
 @Injectable()
 export class PropertyService {
@@ -68,4 +72,52 @@ export class PropertyService {
       return ResponseFactory.error(error.message);
     }
   }
+
+    async getProperties(
+        paginationRequest: PaginationRequest,
+    ): Promise<PropertyPaginationResponse> {
+        try {
+            const { page, take, searchTerm } = paginationRequest;
+            const skip = (page - 1) * take;
+
+            let whereConditions: WhereCondition<Properties> = {};
+
+            if (searchTerm.trim()) {
+                const searchCondition = Like(`%${searchTerm}%`);
+                whereConditions = [
+                    { addressLine1: searchCondition },
+                    { addressLine2: searchCondition },
+                    { city: searchCondition },
+                    { county: searchCondition },
+                    { country: searchCondition },
+                ];
+            }
+
+            const data = await this.propertiesRepo.findAndCount({
+                where: whereConditions,
+                select: {
+                    id: true,
+                    addressLine1: true,
+                    addressLine2: true,
+                    city: true,
+                    county: true,
+                    postCode: true,
+                    country: true,
+                    noOfBeds: true,
+                    noOfBaths: true,
+                    noOfGarages: true,
+                    hasParking: true,
+                    hasGarden: true,
+                    hasGarage: true,
+                },
+                take: take,
+                skip: skip,
+            });
+
+            var paginationResponse = paginateResponse(data, page, take);
+            return ResponseFactory.success(paginationResponse);
+        } catch (error) {
+            throw ResponseFactory.error(`Error fetching properties: ${error.message}`);
+        }
+    }
 }
