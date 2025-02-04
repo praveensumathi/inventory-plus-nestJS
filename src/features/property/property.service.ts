@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Properties } from "src/entities";
+import { Clients, Properties } from "src/entities";
 import { Repository } from "typeorm";
 import { PropertyRequestDto } from "./dto/property.request";
 import {
   CustomResponse,
   ResponseFactory,
 } from "src/common/dto/common.response";
-import { CREATE_ID } from "src/common/constants/constants";
+import { NEW_ENTITY_ID } from "src/common/constants/constants";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
 import { getLoggedInUserId } from "src/common/utils";
@@ -25,22 +25,30 @@ export class PropertyService {
   async save(
     propertyDto: PropertyRequestDto,
     req: Request,
-  ): Promise<CustomResponse> {
+  ): Promise<CustomResponse<PropertyRequestDto>> {
     try {
-      let propertyEntity = await this.propertiesRepo.findOne({
-        where: { id: propertyDto.id },
+      let propertyEntity = await this.propertiesRepo.findOneBy({
+        id: propertyDto.id,
       });
 
-      propertyEntity ??= new Properties();
+      if (propertyEntity == null && propertyDto.id == NEW_ENTITY_ID) {
+        return ResponseFactory.error("Property Not Found");
+      }
+
       var loggedInUserId = getLoggedInUserId(req);
 
-      if (propertyEntity.id == CREATE_ID) {
+      if (propertyDto.id == NEW_ENTITY_ID) {
         propertyEntity = this.mapper.map(
           propertyDto,
           PropertyRequestDto,
           Properties,
         );
         propertyEntity.createdBy = loggedInUserId;
+
+        var clientEntity = new Clients();
+        clientEntity.id = propertyDto.clientId;
+
+        propertyEntity.client = clientEntity;
       } else {
         this.mapper.mutate(
           propertyDto,
@@ -53,7 +61,8 @@ export class PropertyService {
 
       propertyEntity = await this.propertiesRepo.save(propertyEntity);
 
-      return ResponseFactory.success(propertyEntity);
+      propertyDto.id = propertyEntity.id;
+      return ResponseFactory.success(propertyDto);
     } catch (error) {
       console.error("Error saving property:", error);
       return ResponseFactory.error(error.message);

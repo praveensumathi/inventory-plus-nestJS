@@ -8,11 +8,15 @@ import { Request } from "express";
 import { ClientDto } from "./dto/create-client.dto";
 import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
 import { PaginationRequest } from "src/common/dto/pagination.request";
-import { ApiOkPaginatedResponse } from "src/decorator/response.decorator";
+import {
+  ApiOkCustomResponse,
+  ApiOkPaginatedResponse,
+} from "src/decorator/response.decorator";
 import {
   ClientListDtoResponse,
   ClientPaginationResponse,
 } from "./dto/client.response";
+import { CustomResponse } from "src/common/dto/common.response";
 
 @ApiBearerAuth()
 @Controller("client")
@@ -23,6 +27,7 @@ export class ClientController {
   ) {}
 
   @Post("save")
+  @ApiOkCustomResponse(ClientDto, CustomResponse)
   create(
     @Req() req: Request,
     @Cookies(COOKIE_CUSTOMER_ID) customerId: string,

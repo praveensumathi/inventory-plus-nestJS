@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Clients } from "src/entities";
+import { Clients, Customers } from "src/entities";
 import { Like, Repository } from "typeorm";
 import { ClientDto } from "./dto/create-client.dto";
 import { Mapper } from "@automapper/core";
@@ -10,7 +10,7 @@ import {
   CustomResponse,
   ResponseFactory,
 } from "src/common/dto/common.response";
-import { CREATE_ID } from "src/common/constants/constants";
+import { NEW_ENTITY_ID } from "src/common/constants/constants";
 import { PaginationRequest } from "src/common/dto/pagination.request";
 import { paginateResponse } from "src/common/utils/pagination-util";
 import { WhereCondition } from "src/common/types";
@@ -30,7 +30,7 @@ export class ClientService {
     clientDto: ClientDto,
     customerId: string,
     req: Request,
-  ): Promise<CustomResponse> {
+  ): Promise<CustomResponse<ClientDto>> {
     try {
       var clientEntity = await this.clientsRepo.findOne({
         where: {
@@ -38,20 +38,27 @@ export class ClientService {
         },
       });
 
-      clientEntity ??= new Clients();
+      if (clientEntity == null && clientDto.id != NEW_ENTITY_ID) {
+        return ResponseFactory.error("Client Not Found");
+      }
+
       var loggedInUserId = getLoggedInUserId(req);
-      
-      if (clientDto.id == CREATE_ID) {
+
+      if (clientDto.id == NEW_ENTITY_ID) {
         clientEntity = this.mapper.map(clientDto, ClientDto, Clients);
         clientEntity.createdBy = loggedInUserId;
-        clientEntity.customer.id = customerId;
+
+        var custometEntity = new Customers();
+        custometEntity.id = customerId;
+        clientEntity.customer = custometEntity;
       } else {
         this.mapper.mutate(clientDto, clientEntity, ClientDto, Clients);
         clientEntity.modifiedBy = loggedInUserId;
       }
       clientEntity = await this.clientsRepo.save(clientEntity);
 
-      return ResponseFactory.success(clientEntity);
+      clientDto.id = clientEntity.id;
+      return ResponseFactory.success(clientDto);
     } catch (error) {
       return ResponseFactory.error(error.message);
     }

@@ -18,7 +18,7 @@ export class PropertyController {
 
   @Post("save")
   @ApiOkCustomResponse(PropertyRequestDto, CustomResponse)
-  create(@Req() req: Request, @Body() createPropertyDto: PropertyRequestDto) {
+  save(@Req() req: Request, @Body() createPropertyDto: PropertyRequestDto) {
     return this.propertyService.save(createPropertyDto, req);
   }
 }
