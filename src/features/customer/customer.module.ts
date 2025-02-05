@@ -4,8 +4,6 @@ import { CustomerController } from "./customer.controller";
 import { CustomerMapperProfile } from "src/mapperProfile";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Customers } from "src/entities";
-import { AutomapperModule } from "@automapper/nestjs";
-import { classes } from "@automapper/classes";
 
 @Module({
   imports: [TypeOrmModule.forFeature([Customers])],

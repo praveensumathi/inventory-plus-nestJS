@@ -7,6 +7,7 @@ import {
 } from "@automapper/core";
 import { Contacts } from "src/entities";
 import { ContactRequestDto } from "src/features/contact/dto/contact.request";
+import { ContactResponseDto } from "src/features/contact/dto/contact.response";
 
 @Injectable()
 export class ContactMapperProfile extends AutomapperProfile {
@@ -17,6 +18,8 @@ export class ContactMapperProfile extends AutomapperProfile {
   override get profile(): MappingProfile {
     return (mapper) => {
       createMap(mapper, ContactRequestDto, Contacts);
+
+      createMap(mapper, Contacts, ContactResponseDto);
     };
   }
 }
