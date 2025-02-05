@@ -20,28 +20,24 @@ export class Contacts {
   name: string | null;
 
   @AutoMap()
-  @Column("character varying", { name: "Type", nullable: true, length: 50 })
-  type: string | null;
-
-  @AutoMap()
   @Column("character varying", { name: "Email", nullable: true, length: 100 })
   email: string | null;
 
   @AutoMap()
-  @Column("character varying", { name: "phone", nullable: true, length: 20 })
-  phone: string | null;
+  @Column("character varying", { name: "Mobile", nullable: true, length: 20 })
+  mobile: string | null;
 
   @AutoMap()
-  @Column("boolean", { name: "Signee", default: () => "false" })
-  signee: boolean;
+  @Column("boolean", { name: "IsSignee", default: () => "false" })
+  isSignee: boolean;
 
   @AutoMap()
-  @Column("boolean", { name: "Notify", default: () => "false" })
-  notify: boolean;
+  @Column("boolean", { name: "NotifyConductDate", default: () => "false" })
+  notifyConductDate: boolean;
 
   @AutoMap()
-  @Column("boolean", { name: "Deliver", default: () => "false" })
-  deliver: boolean;
+  @Column("boolean", { name: "CanDeliverReport", default: () => "false" })
+  canDeliverReport: boolean;
 
   @AutoMap()
   @Column("bigint", { name: "CreatedBy", nullable: true })
@@ -67,9 +63,21 @@ export class Contacts {
   })
   modifiedDate: Date | null;
 
+  @AutoMap()
+  @Column("character varying", { name: "Title", nullable: true, length: 10 })
+  title: string | null;
+
+  @AutoMap()
+  @Column("character varying", { name: "Telephone", nullable: true })
+  telephone: string | null;
+
+  @AutoMap()
+  @Column("character varying", { name: "Note", nullable: true, length: 500 })
+  note: string | null;
+
   @OneToMany(
     () => InspectionContacts,
-    (inspectionContacts) => inspectionContacts.contact
+    (inspectionContacts) => inspectionContacts.contact,
   )
   inspectionContacts: InspectionContacts[];
 }

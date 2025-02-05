@@ -1,7 +1,5 @@
 # Inventory Plus
 
-Commands to create a new resource
-
 # Pre requisite
 
 node version >20

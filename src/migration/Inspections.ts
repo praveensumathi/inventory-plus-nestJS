@@ -32,14 +32,18 @@ export class Inspections {
   type: number | null;
 
   @AutoMap()
-  @Column("smallint", { name: "LocationOfKeys", nullable: true })
-  locationOfKeys: number | null;
+  @Column("character varying", {
+    name: "LocationOfKeys",
+    nullable: true,
+    length: 255,
+  })
+  locationOfKeys: string | null;
 
   @AutoMap()
-  @Column("character", {
+  @Column("character varying", {
     name: "KeyReturnInstruction",
     nullable: true,
-    length: 100,
+    length: 255,
   })
   keyReturnInstruction: string | null;
 
