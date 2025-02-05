@@ -35,7 +35,7 @@ export class PropertyService {
         id: propertyDto.id,
       });
 
-      if (propertyEntity == null && propertyDto.id == NEW_ENTITY_ID) {
+      if (propertyEntity == null && propertyDto.id != NEW_ENTITY_ID) {
         return ResponseFactory.error("Property Not Found");
       }
 

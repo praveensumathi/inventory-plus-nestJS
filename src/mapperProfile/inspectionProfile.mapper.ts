@@ -5,18 +5,18 @@ import {
   Mapper,
   MappingProfile,
 } from "@automapper/core";
-import { PropertyRequestDto } from "src/features/property/dto/property.request";
-import { Properties } from "src/entities";
+import { Inspections } from "src/entities";
+import { InspectionRequestDto } from "src/features/inspection/dto/inspection-request";
 
 @Injectable()
-export class PropertyMapperProfile extends AutomapperProfile {
+export class InspectionMapperProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
 
   override get profile(): MappingProfile {
     return (mapper) => {
-      createMap(mapper, PropertyRequestDto, Properties);
+      createMap(mapper, InspectionRequestDto, Inspections);
     };
   }
 }

@@ -5,18 +5,18 @@ import {
   Mapper,
   MappingProfile,
 } from "@automapper/core";
-import { PropertyRequestDto } from "src/features/property/dto/property.request";
-import { Properties } from "src/entities";
+import { Contacts } from "src/entities";
+import { ContactRequestDto } from "src/features/contact/dto/contact.request";
 
 @Injectable()
-export class PropertyMapperProfile extends AutomapperProfile {
+export class ContactMapperProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
 
   override get profile(): MappingProfile {
     return (mapper) => {
-      createMap(mapper, PropertyRequestDto, Properties);
+      createMap(mapper, ContactRequestDto, Contacts);
     };
   }
 }

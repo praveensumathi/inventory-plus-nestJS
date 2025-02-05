@@ -1,15 +1,13 @@
 import { Module } from "@nestjs/common";
 import { InspectionService } from "./inspection.service";
 import { InspectionController } from "./inspection.controller";
-import { MulterModule } from "@nestjs/platform-express";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Inspections } from "src/entities";
+import { InspectionMapperProfile } from "src/mapperProfile/inspectionProfile.mapper";
 
 @Module({
-  imports: [
-    // MulterModule.register({
-    //   dest: "./upload",
-    // }),
-  ],
+  imports: [TypeOrmModule.forFeature([Inspections])],
   controllers: [InspectionController],
-  providers: [InspectionService],
+  providers: [InspectionService, InspectionMapperProfile],
 })
 export class InspectionModule {}

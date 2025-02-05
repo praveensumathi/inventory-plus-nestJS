@@ -1,34 +1,24 @@
 import {
   Body,
   Controller,
-  Get,
   Post,
-  Request,
-  UploadedFile,
-  UseInterceptors,
+  Req,
 } from "@nestjs/common";
 import { InspectionService } from "./inspection.service";
-import { Public, Roles } from "src/decorator";
-import { ApiBearerAuth, ApiConsumes } from "@nestjs/swagger";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { CreateUserRequestDto } from "../users/dto/user.request";
+import { ApiBearerAuth } from "@nestjs/swagger";
+import { CustomResponse } from "src/common/dto/common.response";
+import { InspectionRequestDto } from "./dto/inspection-request";
+import { ApiOkCustomResponse } from "src/decorator/response.decorator";
+import { Request } from "express";
 
 @ApiBearerAuth()
 @Controller("inspection")
 export class InspectionController {
   constructor(private readonly inspectionService: InspectionService) {}
 
-  @Public()
-  @Post("upload")
-  @ApiConsumes("multipart/form-data")
-  @UseInterceptors(FileInterceptor("file"))
-  uploadFile(
-    @Body() body: CreateUserRequestDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return {
-      body,
-      file: file.buffer.toString(),
-    };
+  @Post("save")
+  @ApiOkCustomResponse(InspectionRequestDto, CustomResponse)
+  save(@Req() req: Request, @Body() createInspectionDto: InspectionRequestDto) {
+    return this.inspectionService.save(createInspectionDto, req);
   }
 }

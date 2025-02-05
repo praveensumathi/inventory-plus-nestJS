@@ -2,9 +2,6 @@ import { Body, Controller, Post, Req } from "@nestjs/common";
 import { PropertyService } from "./property.service";
 import {
   ApiBearerAuth,
-  ApiExtraModels,
-  ApiResponse,
-  getSchemaPath,
 } from "@nestjs/swagger";
 import { PropertyRequestDto } from "./dto/property.request";
 import { Request } from "express";
