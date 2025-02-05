@@ -1,9 +1,20 @@
+import { AutoMap } from "@automapper/classes";
+
 export class ContactResponseDto {
-    id: string;
-    name: string;
-    email: string;
-    mobile: string;
-    isSignee: boolean;
-    notifyConductDate: boolean;
-    canDeliverReport: boolean;
+  @AutoMap()
+  id: string;
+  @AutoMap()
+  name: string;
+  @AutoMap()
+  email: string;
+  @AutoMap()
+  mobile: string;
+  @AutoMap()
+  isSignee: boolean;
+  @AutoMap()
+  notifyConductDate: boolean;
+  @AutoMap()
+  canDeliverReport: boolean;
+
+  inspectionId: string;
 }

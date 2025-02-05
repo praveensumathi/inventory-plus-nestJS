@@ -80,6 +80,4 @@ export class Contacts {
     (inspectionContacts) => inspectionContacts.contact,
   )
   inspectionContacts: InspectionContacts[];
-    client: import("c:/Users/kumutha/OneDrive/Desktop/Freelance/Inventory/Nest js/src/entities/Inspections").Inspections;
-    contactEntity: import("c:/Users/kumutha/OneDrive/Desktop/Freelance/Inventory/Nest js/src/entities/Inspections").Inspections;
 }

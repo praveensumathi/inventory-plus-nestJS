@@ -1,10 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
-import {
-  createMap,
-  Mapper,
-  MappingProfile,
-} from "@automapper/core";
+import { createMap, Mapper, MappingProfile } from "@automapper/core";
 import { Contacts } from "src/entities";
 import { ContactRequestDto } from "src/features/contact/dto/contact.request";
 import { ContactResponseDto } from "src/features/contact/dto/contact.response";

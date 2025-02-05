@@ -68,3 +68,7 @@ export function transformDataToDto<S extends D, D>(
   const [result, total] = data;
   return [result.map((item) => ({ ...item }) as D), total];
 }
+
+export function toPlainObjects<T>(entities: T[]): T[] {
+  return entities.map((entity) => JSON.parse(JSON.stringify(entity)));
+}
