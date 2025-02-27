@@ -17,8 +17,9 @@ export class StaticService {
       roles: this.getRoles(),
       inspectionStatuses: this.getInspectionStatuses(),
       inspectionStatusesForTypist: this.getInspectionStatusesForTypist(),
-      furnishingStatuses: this.getFurnishingStatuses(),
+      furnishingTypes: this.getFurnishingTypes(),
       buildingTypes: this.getBuildingTypes(),
+      personTitles: this.PersonTitles(),
     };
   }
 
@@ -100,7 +101,7 @@ export class StaticService {
     ];
   }
 
-  private getFurnishingStatuses() {
+  private getFurnishingTypes() {
     return [
       { value: FurnishingStatusEnum.FURNISHED, label: "Furnished" },
       { value: FurnishingStatusEnum.UNFURNISHED, label: "Unfurnished" },
@@ -120,7 +121,7 @@ export class StaticService {
     ];
   }
 
-  private PersonTitleEnum() {
+  private PersonTitles() {
     return [
       { value: PersonTitleEnum.MR, label: "Mr" },
       { value: PersonTitleEnum.MRS, label: "Mrs" },
