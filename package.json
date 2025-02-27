@@ -11,7 +11,7 @@
     "start:dev": "env-cmd -f ./environments/.dev.env nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "scaffoldingdb:local-db": "npx typeorm-model-generator -h localhost -d PropertyPulse -u postgres -x root -e postgres -o ./src/migration --noConfig true",
+    "scaffoldingdb:local-db": "npx typeorm-model-generator -h localhost -d PropertyPulse-Local -u postgres -x root -e postgres -o ./src/migration --noConfig true",
     "scaffoldingdb:dev-db": "npx typeorm-model-generator -h 117.218.92.111 -p 5432 -d PropertyPulse -u postgres -x root -e postgres -o ./src/migration --noConfig true"
   },
   "dependencies": {
