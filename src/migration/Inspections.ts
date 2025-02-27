@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { AutoMap } from "@automapper/classes";
+import { InspSections } from "./InspSections";
 import { InspectionContacts } from "./InspectionContacts";
 import { Properties } from "./Properties";
-import { Sections } from "./Sections";
 
 @Index("Inspections_pkey", ["id"], { unique: true })
 @Entity("Inspections", { schema: "public" })
@@ -24,12 +24,12 @@ export class Inspections {
   name: string | null;
 
   @AutoMap()
-  @Column("smallint", { name: "Template", nullable: true })
-  template: number | null;
+  @Column("bigint", { name: "Template", nullable: true })
+  template: string | null;
 
   @AutoMap()
-  @Column("smallint", { name: "Type", nullable: true })
-  type: number | null;
+  @Column("smallint", { name: "ReportType", nullable: true })
+  reportType: number | null;
 
   @AutoMap()
   @Column("character varying", {
@@ -79,6 +79,9 @@ export class Inspections {
   @Column("smallint", { name: "InspectionState", default: () => "1" })
   inspectionState: number;
 
+  @OneToMany(() => InspSections, (inspSections) => inspSections.inspection)
+  inspSections: InspSections[];
+
   @OneToMany(
     () => InspectionContacts,
     (inspectionContacts) => inspectionContacts.inspection
@@ -88,7 +91,4 @@ export class Inspections {
   @ManyToOne(() => Properties, (properties) => properties.inspections)
   @JoinColumn([{ name: "PropertyId", referencedColumnName: "id" }])
   property: Properties;
-
-  @OneToMany(() => Sections, (sections) => sections.inspection)
-  sections: Sections[];
 }

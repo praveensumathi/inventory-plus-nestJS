@@ -7,12 +7,12 @@ import {
   OneToMany,
 } from "typeorm";
 import { AutoMap } from "@automapper/classes";
-import { Sections } from "./Sections";
-import { SectionItemDetails } from "./SectionItemDetails";
+import { InspSections } from "./InspSections";
+import { InspSectionItems } from "./InspSectionItems";
 
-@Index("SectionHeaders_pkey", ["id"], { unique: true })
-@Entity("SectionHeaders", { schema: "public" })
-export class SectionHeaders {
+@Index("InspSectionHeaders_pkey", ["id"], { unique: true })
+@Entity("InspSectionHeaders", { schema: "public" })
+export class InspSectionHeaders {
   @AutoMap()
   @Column("bigint", { primary: true, name: "Id" })
   id: string;
@@ -46,10 +46,6 @@ export class SectionHeaders {
   type: string | null;
 
   @AutoMap()
-  @Column("text", { name: "Source", nullable: true })
-  source: string | null;
-
-  @AutoMap()
   @Column("timestamp without time zone", {
     name: "CratedDate",
     nullable: true,
@@ -77,13 +73,20 @@ export class SectionHeaders {
   @Column("uuid", { name: "UUID", nullable: true })
   uuid: string | null;
 
-  @ManyToOne(() => Sections, (sections) => sections.sectionHeaders)
-  @JoinColumn([{ name: "SectionId", referencedColumnName: "id" }])
-  section: Sections;
+  @AutoMap()
+  @Column("jsonb", { name: "Source", nullable: true })
+  source: object | null;
+
+  @ManyToOne(
+    () => InspSections,
+    (inspSections) => inspSections.inspSectionHeaders
+  )
+  @JoinColumn([{ name: "InspSectionId", referencedColumnName: "id" }])
+  inspSection: InspSections;
 
   @OneToMany(
-    () => SectionItemDetails,
-    (sectionItemDetails) => sectionItemDetails.sectionHeader
+    () => InspSectionItems,
+    (inspSectionItems) => inspSectionItems.inspSectionHeader
   )
-  sectionItemDetails: SectionItemDetails[];
+  inspSectionItems: InspSectionItems[];
 }

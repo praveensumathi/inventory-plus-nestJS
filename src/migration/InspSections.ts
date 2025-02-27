@@ -8,13 +8,13 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { AutoMap } from "@automapper/classes";
-import { SectionHeaders } from "./SectionHeaders";
-import { SectionItems } from "./SectionItems";
+import { InspSectionHeaders } from "./InspSectionHeaders";
+import { InspSectionItems } from "./InspSectionItems";
 import { Inspections } from "./Inspections";
 
-@Index("Sections_pkey", ["id"], { unique: true })
-@Entity("Sections", { schema: "public" })
-export class Sections {
+@Index("InspSections_pkey", ["id"], { unique: true })
+@Entity("InspSections", { schema: "public" })
+export class InspSections {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
@@ -30,10 +30,6 @@ export class Sections {
     length: 100,
   })
   blockType: string | null;
-
-  @AutoMap()
-  @Column("character varying", { name: "UUID", nullable: true, length: 100 })
-  uuid: string | null;
 
   @AutoMap()
   @Column("boolean", { name: "HideOnReport", default: () => "false" })
@@ -71,13 +67,23 @@ export class Sections {
   })
   modifiedDate: Date | null;
 
-  @OneToMany(() => SectionHeaders, (sectionHeaders) => sectionHeaders.section)
-  sectionHeaders: SectionHeaders[];
+  @AutoMap()
+  @Column("uuid", { name: "UUID", nullable: true })
+  uuid: string | null;
 
-  @OneToMany(() => SectionItems, (sectionItems) => sectionItems.section)
-  sectionItems: SectionItems[];
+  @OneToMany(
+    () => InspSectionHeaders,
+    (inspSectionHeaders) => inspSectionHeaders.inspSection
+  )
+  inspSectionHeaders: InspSectionHeaders[];
 
-  @ManyToOne(() => Inspections, (inspections) => inspections.sections)
+  @OneToMany(
+    () => InspSectionItems,
+    (inspSectionItems) => inspSectionItems.inspSection
+  )
+  inspSectionItems: InspSectionItems[];
+
+  @ManyToOne(() => Inspections, (inspections) => inspections.inspSections)
   @JoinColumn([{ name: "InspectionId", referencedColumnName: "id" }])
   inspection: Inspections;
 }

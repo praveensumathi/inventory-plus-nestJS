@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "start:local": "env-cmd -f .env nest start --watch",
+    "start:local": "env-cmd -f ./environments/.local.env nest start --watch",
     "start:dev": "env-cmd -f ./environments/.dev.env nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

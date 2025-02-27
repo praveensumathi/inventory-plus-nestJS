@@ -4,16 +4,15 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { AutoMap } from "@automapper/classes";
-import { SectionItemDetails } from "./SectionItemDetails";
-import { Sections } from "./Sections";
+import { InspSectionHeaders } from "./InspSectionHeaders";
+import { InspSections } from "./InspSections";
 
-@Index("SectionItems_pkey", ["id"], { unique: true })
-@Entity("SectionItems", { schema: "public" })
-export class SectionItems {
+@Index("InspSectionItems_pkey", ["id"], { unique: true })
+@Entity("InspSectionItems", { schema: "public" })
+export class InspSectionItems {
   @AutoMap()
   @PrimaryGeneratedColumn({ type: "bigint", name: "Id" })
   id: string;
@@ -31,10 +30,6 @@ export class SectionItems {
   skipReference: boolean;
 
   @AutoMap()
-  @Column("boolean", { name: "CanConfigureFields", default: () => "false" })
-  canConfigureFields: boolean;
-
-  @AutoMap()
   @Column("boolean", { name: "CanAddActions", default: () => "true" })
   canAddActions: boolean;
 
@@ -49,13 +44,21 @@ export class SectionItems {
   @Column("smallint", { name: "Status", default: () => "1" })
   status: number;
 
-  @OneToMany(
-    () => SectionItemDetails,
-    (sectionItemDetails) => sectionItemDetails.sectionItem
-  )
-  sectionItemDetails: SectionItemDetails[];
+  @AutoMap()
+  @Column("character varying", { name: "Value", nullable: true, length: 5000 })
+  value: string | null;
 
-  @ManyToOne(() => Sections, (sections) => sections.sectionItems)
-  @JoinColumn([{ name: "SectionId", referencedColumnName: "id" }])
-  section: Sections;
+  @ManyToOne(
+    () => InspSectionHeaders,
+    (inspSectionHeaders) => inspSectionHeaders.inspSectionItems
+  )
+  @JoinColumn([{ name: "InspSectionHeaderId", referencedColumnName: "id" }])
+  inspSectionHeader: InspSectionHeaders;
+
+  @ManyToOne(
+    () => InspSections,
+    (inspSections) => inspSections.inspSectionItems
+  )
+  @JoinColumn([{ name: "InspSectionId", referencedColumnName: "id" }])
+  inspSection: InspSections;
 }

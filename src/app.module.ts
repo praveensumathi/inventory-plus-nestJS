@@ -19,6 +19,7 @@ import { ClientModule } from "./features/client/client.module";
 import { EmailService } from "./services/mail/email.service";
 import { EmailModule } from "./services/mail/email.module";
 import { ContactModule } from './features/contact/contact.module';
+import { StaticModule } from './features/static/static.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ContactModule } from './features/contact/contact.module';
     UsersModule,
     ClientModule,
     ContactModule,
+    StaticModule,
     //EmailModule
   ],
   controllers: [AppController],
