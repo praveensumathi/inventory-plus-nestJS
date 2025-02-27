@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { ContactRequestDto } from './dto/contact.request';
 import { ApiOkCustomResponse, ApiOkPaginatedResponse } from 'src/decorator/response.decorator';
 import { CustomResponse } from 'src/common/dto/common.response';
 import { Request } from "express";
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { ContactResponseDto } from './dto/contact.response';
 
 @ApiBearerAuth()
@@ -22,5 +22,11 @@ export class ContactController {
   @ApiOkCustomResponse(ContactResponseDto, CustomResponse)
   getContacts(@Param("id") id: string) {
     return this.contactService.getContactsByInspectionId(id);
-    }
+  }
+
+  @Delete("deleteByContactId/:id")
+  @ApiOkResponse({ type: CustomResponse })
+  async delete(@Param('id') contactId: string) {
+    return this.contactService.delete(contactId);
+  }
 }

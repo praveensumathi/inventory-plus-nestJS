@@ -125,4 +125,17 @@ export class ContactService {
       );
     }
   }
+
+  async delete(contactId: string): Promise<CustomResponse<void>> {
+    try {
+      await this.inspectionContactsRepo.delete({ contact: { id: contactId } });
+
+      await this.contactsRepo.delete(contactId);
+
+      return ResponseFactory.success();
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+      return ResponseFactory.error(error.message);
+    }
+  }
 }
