@@ -11,20 +11,22 @@ import {
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/auth-request.dto";
 import { CustomResponse } from "src/common/dto/common.response";
+import { ApiBearerAuth, ApiExtraModels } from "@nestjs/swagger";
 import {
-  ApiBearerAuth,
-  ApiExtraModels,
-  ApiResponse,
-  getSchemaPath,
-} from "@nestjs/swagger";
-import { signInResponseDto, LoggedInUserDto } from "./dto/auth-response.dto";
+  signInResponseDto,
+  LoggedInUserDto,
+  UserProfileResponseDto,
+} from "./dto/auth-response.dto";
 import { Cookies, Public } from "src/decorator";
 import { LocalAuthGuard } from "./guards";
 import { Response, Request } from "express";
 import {
+  ACCESS_TOKEN,
   COOKIE_CUSTOMER_ID,
   COOKIE_ROLE_ID,
 } from "src/common/constants/constants";
+import { JWTPayloadType } from "src/common/types";
+import { ApiOkCustomResponse } from "src/decorator/response.decorator";
 
 @ApiBearerAuth()
 @Controller("auth")
@@ -33,25 +35,27 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post("login")
-  @ApiResponse({
-    status: 200,
-    description: "Login successful",
-    schema: {
-      allOf: [
-        { $ref: getSchemaPath(CustomResponse) },
-        {
-          properties: {
-            data: { $ref: getSchemaPath(signInResponseDto) },
-          },
-        },
-      ],
-    },
-  })
+  @ApiOkCustomResponse(signInResponseDto, CustomResponse)
   @UseGuards(LocalAuthGuard)
   @Public()
-  login(@Req() req, @Body() signInDto: SignInDto) {
-    var loggedInUser: LoggedInUserDto = req.user;
-    return this.authService.login(loggedInUser);
+  async login(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() signInDto: SignInDto,
+  ) {
+    var loggedInUser = req.user as LoggedInUserDto;
+    const loginRespone = await this.authService.login(loggedInUser);
+
+    if (!loginRespone.data.accessToken) {
+      res.status(401).json({ message: "Unauthorized" });
+    }
+
+    res.cookie(ACCESS_TOKEN, loginRespone.data.accessToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day expiration
+    });
+
+    res.status(200).json(loginRespone);
   }
 
   @Get("set-user-customer-role/:cusId/:roleId")
@@ -72,5 +76,13 @@ export class AuthController {
     @Cookies(COOKIE_ROLE_ID) roleId: number,
   ) {
     return res.send({ customerId, roleId });
+  }
+
+  @Get("me")
+  @ApiOkCustomResponse(UserProfileResponseDto, CustomResponse)
+  getMe(@Req() req: Request) {
+    //var isAuthenticated = req.isAuthenticated();
+    var loggedInUser = req.user as JWTPayloadType;
+    return this.authService.getProfile(loggedInUser);
   }
 }

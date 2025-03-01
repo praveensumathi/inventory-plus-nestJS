@@ -26,23 +26,31 @@ export class StaticService {
   private getInspectionTypes() {
     return [
       {
+        id: 1,
         value: InspectionType.INVENTORY_MAKE_AND_CHECK_IN,
         label: "Inventory Make and Check-In",
       },
-      { value: InspectionType.INVENTORY, label: "Inventory" },
-      { value: InspectionType.CHECK_IN, label: "Check-In" },
-      { value: InspectionType.CHECK_OUT, label: "Check-Out" },
+      { id: 2, value: InspectionType.INVENTORY, label: "Inventory" },
+      { id: 3, value: InspectionType.CHECK_IN, label: "Check-In" },
+      { id: 4, value: InspectionType.CHECK_OUT, label: "Check-Out" },
       {
+        id: 5,
         value: InspectionType.MID_TERM_INSPECTION,
         label: "Mid Term Inspection",
       },
-      { value: InspectionType.SNAGGING_REPORT, label: "Snagging Report" },
-      { value: InspectionType.HMO, label: "HMO" },
       {
+        id: 6,
+        value: InspectionType.SNAGGING_REPORT,
+        label: "Snagging Report",
+      },
+      { id: 7, value: InspectionType.HMO, label: "HMO" },
+      {
+        id: 8,
         value: InspectionType.SCHEDULE_CONDITION_CHECK_IN,
         label: "Schedule of Condition Check-In",
       },
       {
+        id: 9,
         value: InspectionType.SCHEDULE_CONDITION_CHECK_OUT,
         label: "Schedule of Condition Check-Out",
       },

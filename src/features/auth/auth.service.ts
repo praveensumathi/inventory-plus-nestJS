@@ -1,7 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
-import { signInResponseDto, LoggedInUserDto } from "./dto/auth-response.dto";
+import {
+  signInResponseDto,
+  LoggedInUserDto,
+  UserProfileResponseDto,
+} from "./dto/auth-response.dto";
 import {
   CustomResponse,
   ResponseFactory,
@@ -10,13 +14,7 @@ import { isNotEmpty, PasswordUtil } from "src/common/utils";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Users } from "src/entities";
 import { Repository } from "typeorm";
-
-export type JWTPayloadType = {
-  sub: string;
-  userName: string;
-  iat?: number;
-  email: string;
-};
+import { JWTPayloadType } from "src/common/types";
 
 @Injectable()
 export class AuthService {
@@ -30,10 +28,6 @@ export class AuthService {
   async login(
     loggedInUser: LoggedInUserDto,
   ): Promise<CustomResponse<signInResponseDto>> {
-    var userCustomersWithRole = await this.usersService.getUserCustomerList(
-      loggedInUser.id,
-    );
-
     const payload = {
       sub: loggedInUser.id,
       userName: loggedInUser.name,
@@ -44,10 +38,6 @@ export class AuthService {
 
     var data: signInResponseDto = {
       accessToken: token,
-      userData: {
-        ...loggedInUser,
-        userCustomers: userCustomersWithRole,
-      },
     };
 
     return ResponseFactory.success(data);
@@ -72,5 +62,22 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+  async getProfile(
+    loggedInUser: JWTPayloadType,
+  ): Promise<CustomResponse<UserProfileResponseDto>> {
+    var userCustomersWithRole = await this.usersService.getUserCustomerList(
+      loggedInUser.sub,
+    );
+
+    var data: UserProfileResponseDto = {
+      id: loggedInUser.sub,
+      name: loggedInUser.userName,
+      email: loggedInUser.email,
+      userCustomers: userCustomersWithRole,
+    };
+
+    return ResponseFactory.success(data);
   }
 }

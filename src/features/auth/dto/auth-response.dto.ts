@@ -34,5 +34,6 @@ export class SignInUserDataDto {
 
 export class signInResponseDto {
   accessToken: string;
-  userData: SignInUserDataDto;
 }
+
+export class UserProfileResponseDto extends SignInUserDataDto {}
