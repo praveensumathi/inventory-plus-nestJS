@@ -2,8 +2,8 @@ import { applyDecorators, Type } from "@nestjs/common";
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from "@nestjs/swagger";
 
 export const ApiOkPaginatedResponse = <
-  DataDto extends Type<unknown>,
-  PaginationResponse extends Type<unknown>,
+  DataDto extends Type,
+  PaginationResponse extends Type,
 >(
   dataDto: DataDto,
   paginationResonse: PaginationResponse,
@@ -18,8 +18,8 @@ export const ApiOkPaginatedResponse = <
   );
 
 export const ApiOkCustomResponse = <
-  DtoType extends Type<unknown>,
-  CustomResponseType extends Type<unknown>,
+  DtoType extends Type,
+  CustomResponseType extends Type,
 >(
   dataDto: DtoType,
   customResonse: CustomResponseType,

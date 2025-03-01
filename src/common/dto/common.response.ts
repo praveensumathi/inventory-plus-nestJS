@@ -9,7 +9,7 @@ export class BaseResponse {
 }
 
 export class CustomResponse<T = unknown> extends BaseResponse {
-  @ApiProperty({ isArray: true, type: Object })
+  @ApiProperty({ type: Object, nullable: true })
   data: T | null;
 
   constructor(data: T | null, success: boolean, code: number, message: string) {
