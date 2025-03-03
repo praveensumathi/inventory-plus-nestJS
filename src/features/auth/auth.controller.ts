@@ -8,6 +8,7 @@ import {
   Res,
   Get,
   HttpStatus,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/auth.request";
@@ -47,7 +48,7 @@ export class AuthController {
     const loginRespone = await this.authService.login(loggedInUser);
 
     if (!loginRespone.data.accessToken) {
-      res.status(401).json({ message: "Unauthorized" });
+      throw new UnauthorizedException("Invalid username or password");
     }
 
     res.cookie(ACCESS_TOKEN, loginRespone.data.accessToken, {
@@ -67,7 +68,7 @@ export class AuthController {
     @Res() res: Response,
     @Req() req: Request,
     @Param("cusId") customerId: string,
-    @Param("roleId") roleId: string,
+    @Param("roleId") roleId: number,
   ) {
     if (!customerId || !roleId) {
       return res.status(HttpStatus.BAD_REQUEST).json({

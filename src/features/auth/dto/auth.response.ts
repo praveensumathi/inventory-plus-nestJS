@@ -31,7 +31,7 @@ export class UserProfileResponseDto extends BaseResponse {
 
 export class CustomerRoleSelectionDataDto {
   customerId: string;
-  roleId: string;
+  roleId: number;
 }
 
 export class SelectCustomerRoleResponseDto extends BaseResponse {
