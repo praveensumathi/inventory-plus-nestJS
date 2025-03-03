@@ -1,5 +1,10 @@
 import { applyDecorators, Type } from "@nestjs/common";
-import { ApiExtraModels, ApiOkResponse, getSchemaPath } from "@nestjs/swagger";
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from "@nestjs/swagger";
 
 export const ApiOkPaginatedResponse = <
   DataDto extends Type,
@@ -34,8 +39,10 @@ export const ApiOkCustomResponse = <
             properties: {
               data: { $ref: getSchemaPath(dataDto) },
             },
+            additionalProperties: false,
           },
         ],
+        additionalProperties: false,
       },
     }),
   );

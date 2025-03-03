@@ -11,7 +11,7 @@ import {
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/auth-request.dto";
 import { CustomResponse } from "src/common/dto/common.response";
-import { ApiBearerAuth, ApiExtraModels } from "@nestjs/swagger";
+import { ApiBearerAuth } from "@nestjs/swagger";
 import {
   signInResponseDto,
   LoggedInUserDto,
@@ -30,7 +30,6 @@ import { ApiOkCustomResponse } from "src/decorator/response.decorator";
 
 @ApiBearerAuth()
 @Controller("auth")
-@ApiExtraModels(CustomResponse, signInResponseDto)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
