@@ -1,6 +1,7 @@
 import { AutoMap } from "@automapper/classes";
+import { BaseResponse } from "src/common/dto/common.response";
 
-export class ContactResponseDto {
+export class ContactDataDto {
   @AutoMap()
   id: string;
   @AutoMap()
@@ -17,4 +18,8 @@ export class ContactResponseDto {
   canDeliverReport: boolean;
 
   inspectionId: string;
+}
+
+export class ContactResponseDto extends BaseResponse {
+  data: ContactDataDto[];
 }

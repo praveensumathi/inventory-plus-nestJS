@@ -1,12 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
-import {
-  createMap,
-  Mapper,
-  MappingProfile,
-} from "@automapper/core";
+import { createMap, Mapper, MappingProfile } from "@automapper/core";
 import { Inspections } from "src/entities";
-import { InspectionRequestDto } from "src/features/inspection/dto/inspection-request";
+import { InspectionRequestDto } from "src/features/inspection/dto/inspection.request";
 
 @Injectable()
 export class InspectionMapperProfile extends AutomapperProfile {

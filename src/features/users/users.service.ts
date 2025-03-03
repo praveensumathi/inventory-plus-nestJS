@@ -12,7 +12,7 @@ import {
 import { isNotEmpty, transformDataToDto } from "src/common/utils/common-util";
 import { CustomerUsers } from "src/entities/CustomerUsers";
 import { PasswordUtil } from "src/common/utils";
-import { UserCustomers } from "../auth/dto/auth-response.dto";
+import { UserCustomers } from "../auth/dto/auth.response";
 import { RolesEnum } from "src/common/enums/enum";
 import { PaginationRequest } from "src/common/dto/pagination.request";
 import { paginateResponse } from "src/common/utils/pagination-util";
@@ -119,12 +119,12 @@ export class UsersService {
     });
 
     var userCustomersWithRole = userWithListOfCustomerAndRole.map((item) => {
-      return new UserCustomers({
+      return {
         customerId: item.customer.id,
         customerName: item.customer.name,
         roleId: item.roleId,
         roleName: RolesEnum[item.roleId],
-      });
+      } as UserCustomers;
     });
 
     return userCustomersWithRole;

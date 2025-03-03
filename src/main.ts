@@ -20,7 +20,7 @@ async function bootstrap() {
   if (document.components?.schemas) {
     Object.values(document.components.schemas).forEach((schema: any) => {
       if (schema.type === "object") {
-        schema.additionalProperties = false; // Instead of deleting, explicitly set to false
+        schema.additionalProperties = false;
       }
     });
   }

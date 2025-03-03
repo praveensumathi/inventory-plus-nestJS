@@ -8,7 +8,7 @@ import {
   MappingProfile,
 } from "@automapper/core";
 import { Clients } from "src/entities";
-import { ClientDto } from "src/features/client/dto/create-client.dto";
+import { ClientDataDto } from "src/features/client/dto/client.request";
 
 @Injectable()
 export class ClientMapperProfile extends AutomapperProfile {
@@ -18,7 +18,7 @@ export class ClientMapperProfile extends AutomapperProfile {
 
   override get profile(): MappingProfile {
     return (mapper) => {
-      createMap(mapper, ClientDto, Clients);
+      createMap(mapper, ClientDataDto, Clients);
     };
   }
 }

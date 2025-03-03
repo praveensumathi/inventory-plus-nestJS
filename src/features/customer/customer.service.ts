@@ -2,10 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Customers } from "src/entities";
 import { Repository } from "typeorm";
-import { CreateCustomerDto } from "./dto/customer-request";
+import { CreateCustomerDto } from "./dto/customer.request";
 import { InjectMapper } from "@automapper/nestjs";
 import { Mapper } from "@automapper/core";
-import { CustomerInfoDto } from "./dto/customer-response";
+import { CustomerInfoDto } from "./dto/customer.response";
 import {
   CustomResponse,
   ResponseFactory,

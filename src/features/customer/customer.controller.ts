@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Param, Get } from "@nestjs/common";
 import { CustomerService } from "./customer.service";
-import { ApiBearerAuth } from "@nestjs/swagger";
-import { CreateCustomerDto } from "./dto/customer-request";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
+import { CreateCustomerDto } from "./dto/customer.request";
 import { Public } from "src/decorator";
 
 @ApiBearerAuth()
@@ -9,15 +9,17 @@ import { Public } from "src/decorator";
 export class CustomerController {
   constructor(private readonly customerService: CustomerService) {}
 
-  @Post("createCustomer")
+  @Post("create")
   @Public()
-  async createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
-    return await this.customerService.addCustomer(createCustomerDto);
+  @ApiOkResponse({ type: CreateCustomerDto })
+  async create(@Body() createCustomerDto: CreateCustomerDto) {
+    var { data } = await this.customerService.addCustomer(createCustomerDto);
+    return { ...data, id: data.id.toString() } as CreateCustomerDto;
   }
 
   @Get("getCustomerById/:id")
   @Public()
-  async getCustomerByIs(@Param("id") id: string) {
+  async getCustomerById(@Param("id") id: string) {
     return await this.customerService.getCustomerById(id);
   }
 }

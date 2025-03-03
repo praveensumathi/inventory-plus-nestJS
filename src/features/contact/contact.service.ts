@@ -4,7 +4,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Contacts, Inspections } from "src/entities";
 import { Repository } from "typeorm";
-import { ContactRequestDto } from "./dto/contact.request";
+import {
+  ContactCreateResponseDto,
+  ContactRequestDto,
+} from "./dto/contact.request";
 import { Request } from "express";
 import {
   CustomResponse,
@@ -13,7 +16,7 @@ import {
 import { NEW_ENTITY_ID } from "src/common/constants/constants";
 import { getLoggedInUserId } from "src/common/utils";
 import { InspectionContacts } from "src/entities/InspectionContacts";
-import { ContactResponseDto } from "./dto/contact.response";
+import { ContactDataDto, ContactResponseDto } from "./dto/contact.response";
 import { toPlainObjects } from "src/common/utils/common-util";
 
 @Injectable()
@@ -30,7 +33,7 @@ export class ContactService {
   async save(
     contactDto: ContactRequestDto,
     req: Request,
-  ): Promise<CustomResponse<ContactRequestDto>> {
+  ): Promise<ContactCreateResponseDto> {
     try {
       let contactEntity = await this.contactsRepo.findOneBy({
         id: contactDto.id,
@@ -81,7 +84,7 @@ export class ContactService {
 
   async getContactsByInspectionId(
     inspectionId: string,
-  ): Promise<CustomResponse<ContactResponseDto[]>> {
+  ): Promise<ContactResponseDto> {
     try {
       const inspectionContacts = await this.inspectionContactsRepo.find({
         where: {
@@ -108,12 +111,12 @@ export class ContactService {
         var contactInfo = this.mapper.map(
           inspectionContacts.contact,
           Contacts,
-          ContactResponseDto,
+          ContactDataDto,
         );
         return {
           ...contactInfo,
           inspectionId: inspectionContacts.id,
-        };
+        } as ContactDataDto;
       });
 
       return ResponseFactory.success(contacts);

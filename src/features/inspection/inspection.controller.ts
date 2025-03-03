@@ -1,14 +1,10 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Req,
-} from "@nestjs/common";
+import { Body, Controller, Post, Req } from "@nestjs/common";
 import { InspectionService } from "./inspection.service";
-import { ApiBearerAuth } from "@nestjs/swagger";
-import { CustomResponse } from "src/common/dto/common.response";
-import { InspectionRequestDto } from "./dto/inspection-request";
-import { ApiOkCustomResponse } from "src/decorator/response.decorator";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
+import {
+  InspectionCreateResponseDto,
+  InspectionRequestDto,
+} from "./dto/inspection.request";
 import { Request } from "express";
 
 @ApiBearerAuth()
@@ -17,7 +13,7 @@ export class InspectionController {
   constructor(private readonly inspectionService: InspectionService) {}
 
   @Post("save")
-  @ApiOkCustomResponse(InspectionRequestDto, CustomResponse)
+  @ApiOkResponse({ type: InspectionCreateResponseDto })
   save(@Req() req: Request, @Body() createInspectionDto: InspectionRequestDto) {
     return this.inspectionService.save(createInspectionDto, req);
   }

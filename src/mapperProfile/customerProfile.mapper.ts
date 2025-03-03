@@ -9,8 +9,8 @@ import {
   MappingProfile,
 } from "@automapper/core";
 import { Customers } from "src/entities";
-import { CreateCustomerDto } from "src/features/customer/dto/customer-request";
-import { CustomerInfoDto } from "src/features/customer/dto/customer-response";
+import { CreateCustomerDto } from "src/features/customer/dto/customer.request";
+import { CustomerInfoDto } from "src/features/customer/dto/customer.response";
 
 @Injectable()
 export class CustomerMapperProfile extends AutomapperProfile {

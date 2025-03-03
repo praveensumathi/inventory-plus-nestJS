@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Clients, Customers } from "src/entities";
 import { Like, Repository } from "typeorm";
-import { ClientDto } from "./dto/create-client.dto";
+import { ClientDataDto, ClientResponseDto } from "./dto/client.request";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 import { Request } from "express";
@@ -27,10 +27,10 @@ export class ClientService {
   ) {}
 
   async save(
-    clientDto: ClientDto,
+    clientDto: ClientDataDto,
     customerId: string,
     req: Request,
-  ): Promise<CustomResponse<ClientDto>> {
+  ): Promise<ClientResponseDto> {
     try {
       var clientEntity = await this.clientsRepo.findOne({
         where: {
@@ -45,14 +45,14 @@ export class ClientService {
       var loggedInUserId = getLoggedInUserId(req);
 
       if (clientDto.id == NEW_ENTITY_ID) {
-        clientEntity = this.mapper.map(clientDto, ClientDto, Clients);
+        clientEntity = this.mapper.map(clientDto, ClientDataDto, Clients);
         clientEntity.createdBy = loggedInUserId;
 
         var custometEntity = new Customers();
         custometEntity.id = customerId;
         clientEntity.customer = custometEntity;
       } else {
-        this.mapper.mutate(clientDto, clientEntity, ClientDto, Clients);
+        this.mapper.mutate(clientDto, clientEntity, ClientDataDto, Clients);
         clientEntity.modifiedBy = loggedInUserId;
       }
       clientEntity = await this.clientsRepo.save(clientEntity);

@@ -1,3 +1,4 @@
+import { Type } from "@nestjs/common";
 import { ApiProperty } from "@nestjs/swagger";
 
 export type ClassType<T = any> = new (...args: any[]) => T;
@@ -9,7 +10,7 @@ export class BaseResponse {
 }
 
 export class CustomResponse<T = unknown> extends BaseResponse {
-  @ApiProperty({ type: Object, nullable: true })
+  @ApiProperty({ type: () => Object })
   data: T | null;
 
   constructor(data: T | null, success: boolean, code: number, message: string) {
@@ -22,12 +23,20 @@ export class CustomResponse<T = unknown> extends BaseResponse {
 }
 
 export class ResponseFactory {
-  static success<T = unknown>(
+  static success<T = null, R extends CustomResponse<T> = CustomResponse<T>>(
     data: T = null,
+    responseType?: ClassType<R>,
     code: number = 200,
     message: string = "Success",
   ) {
-    return new CustomResponse(data, true, code, message);
+    const response = (
+      responseType ? Object.create(responseType.prototype) : {}
+    ) as R;
+    response.data = data;
+    response.success = true;
+    response.statusCode = code;
+    response.message = message;
+    return response;
   }
 
   static error(

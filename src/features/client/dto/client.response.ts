@@ -1,6 +1,6 @@
 import { BaseResponse, PaginationMeta } from "src/common/dto/common.response";
 
-export class ClientListDtoResponse {
+export class ClientListDataDto {
   id: string;
   name: string;
   email: string;
@@ -15,23 +15,10 @@ export class ClientListDtoResponse {
 }
 
 export class ClientPaginationResponseDto {
-  items: ClientListDtoResponse[];
+  items: ClientListDataDto[];
   meta: PaginationMeta;
 }
 
 export class ClientPaginationResponse extends BaseResponse {
   data: ClientPaginationResponseDto;
 }
-
-// export class BasePaginationResponseDto<T> {
-//   items: T[];
-//   meta: PaginationMeta;
-// }
-
-// export class BasePaginationResponse<
-//   DataDto extends Type<unknown>,
-// > extends BaseResponse {
-//   data: BasePaginationResponseDto<DataDto>;
-// }
-
-// export class ClientPaginationResponse extends BasePaginationResponse<ClientListDtoResponse> {}

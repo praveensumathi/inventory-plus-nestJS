@@ -3,9 +3,9 @@ import { ClientService } from "./client.service";
 import { EmailService } from "src/services/mail/email.service";
 import { Cookies, Public } from "src/decorator";
 import { SendSingleEmailModel } from "src/services/mail/model/send-email.model";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
 import { Request } from "express";
-import { ClientDto } from "./dto/create-client.dto";
+import { ClientDataDto, ClientResponseDto } from "./dto/client.request";
 import { COOKIE_CUSTOMER_ID } from "src/common/constants/constants";
 import { PaginationRequest } from "src/common/dto/pagination.request";
 import {
@@ -13,7 +13,7 @@ import {
   ApiOkPaginatedResponse,
 } from "src/decorator/response.decorator";
 import {
-  ClientListDtoResponse,
+  ClientListDataDto,
   ClientPaginationResponse,
 } from "./dto/client.response";
 import { CustomResponse } from "src/common/dto/common.response";
@@ -27,17 +27,17 @@ export class ClientController {
   ) {}
 
   @Post("save")
-  @ApiOkCustomResponse(ClientDto, CustomResponse)
+  @ApiOkResponse({ type: ClientResponseDto })
   create(
     @Req() req: Request,
     @Cookies(COOKIE_CUSTOMER_ID) customerId: string,
-    @Body() createClientDto: ClientDto,
+    @Body() createClientDto: ClientDataDto,
   ) {
     return this.clientService.save(createClientDto, customerId, req);
   }
 
-  @Post("get")
-  @ApiOkPaginatedResponse(ClientListDtoResponse, ClientPaginationResponse)
+  @Post("getClients")
+  @ApiOkPaginatedResponse(ClientListDataDto, ClientPaginationResponse)
   getClients(@Req() req: Request, @Body() query: PaginationRequest) {
     return this.clientService.getClients(query);
   }

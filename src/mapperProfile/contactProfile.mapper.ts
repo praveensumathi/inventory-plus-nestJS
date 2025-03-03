@@ -3,7 +3,7 @@ import { AutomapperProfile, InjectMapper } from "@automapper/nestjs";
 import { createMap, Mapper, MappingProfile } from "@automapper/core";
 import { Contacts } from "src/entities";
 import { ContactRequestDto } from "src/features/contact/dto/contact.request";
-import { ContactResponseDto } from "src/features/contact/dto/contact.response";
+import { ContactDataDto } from "src/features/contact/dto/contact.response";
 
 @Injectable()
 export class ContactMapperProfile extends AutomapperProfile {
@@ -15,7 +15,7 @@ export class ContactMapperProfile extends AutomapperProfile {
     return (mapper) => {
       createMap(mapper, ContactRequestDto, Contacts);
 
-      createMap(mapper, Contacts, ContactResponseDto);
+      createMap(mapper, Contacts, ContactDataDto);
     };
   }
 }
