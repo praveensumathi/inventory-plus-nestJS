@@ -6,10 +6,7 @@ import { ClientDataDto, ClientResponseDto } from "./dto/client.request";
 import { Mapper } from "@automapper/core";
 import { InjectMapper } from "@automapper/nestjs";
 import { Request } from "express";
-import {
-  CustomResponse,
-  ResponseFactory,
-} from "src/common/dto/common.response";
+import { ResponseFactory } from "src/common/dto/common.response";
 import { NEW_ENTITY_ID } from "src/common/constants/constants";
 import { PaginationRequest } from "src/common/dto/pagination.request";
 import { paginateResponse } from "src/common/utils/pagination-util";
