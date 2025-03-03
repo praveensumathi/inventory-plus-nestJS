@@ -39,10 +39,8 @@ export const ApiOkCustomResponse = <
             properties: {
               data: { $ref: getSchemaPath(dataDto) },
             },
-            additionalProperties: false,
           },
         ],
-        additionalProperties: false,
       },
     }),
   );
